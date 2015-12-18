@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="join">
+
+	<resultMap type="gjvo" id="groupJoinRM">
+      <result property="gjNo" column="gjno"/>
+      <result property="gjTitle" column="gjtitle"/>
+      <result property="gjContent" column="gjcontent"/>
+      <result property="memberVO.id" column="id"/>
+      <result property="groupVO.memberVO.id" column="gleader_id"/>
+   </resultMap>
+   
+   <insert id="joinGroup">
+      insert into cu_group_join values(cu_group_join_seq.nextval, #{memberVO.id}, #{gjTitle}, #{gjContent}, #{groupVO.memberVO.id}) 
+   </insert>
+  
+   <select id="getMyJoinRequest" resultMap="groupJoinRM">
+      select * from cu_group_join where id=#{id} and gleader_id=#{gLeaderId}
+   </select>
+   
+   <update id="joinGroupUpdate">
+      update cu_group_join set gjtitle=#{gjTitle}, gjcontent=#{gjContent} where id=#{memberVO.id} and gleader_id=#{groupVO.memberVO.id}
+   </update>
+   
+   <select id="MyRequestGroupCount" resultType="int">
+   	  select count(*) from cu_group_join where id=#{id}
+   </select>
+   
+   <select id="getAllJoinRequestList" resultMap="groupJoinRM">
+      select * from cu_group_join where gleader_id=#{gLeaderId}
+   </select>
+   
+</mapper>       
+
+
+
+

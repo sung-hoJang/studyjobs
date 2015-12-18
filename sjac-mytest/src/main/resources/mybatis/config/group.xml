@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="group">
+
+   <resultMap type="gvo" id="groupRM">
+      <result property="memberVO.id" column="gleader_id" />
+      <result property="memberVO.name" column="name" />   
+      <result property="gName" column="gname" />   
+      <result property="gInfo" column="ginfo" />   
+      <result property="gCount" column="gmember_count" javaType="int"/>
+      <result property="gLocation" column="glocation"/>
+      <result property="gDate" column="gdate"/>
+      <result property="curMember" column="cur_member"/>
+      <result property="subjectVO.subject" column="gsubject"/>
+      <result property="subjectVO.subjectCategory" column="subject_category"/>
+      <result property="subjectVO.categoryImg" column="category_image"/>
+   </resultMap>
+   
+   <resultMap type="gvo" id="groupVORM">
+   	  <result property="groupVO.memberVO.id" column="gleader_id" />
+      <result property="groupVO.memberVO.name" column="name" />   
+      <result property="groupVO.gName" column="gname" />   
+      <result property="groupVO.gInfo" column="ginfo" />   
+      <result property="groupVO.gCount" column="gmember_count" javaType="int"/>
+      <result property="groupVO.gLocation" column="glocation"/>
+      <result property="groupVO.gDate" column="gdate"/>
+      <result property="curMember" column="cur_member"/>
+      <result property="groupVO.subjectVO.subject" column="gsubject"/>
+      <result property="groupVO.subjectVO.subjectCategory" column="subject_category"/>
+      <result property="groupVO.subjectVO.categoryImg" column="category_image"/>
+   </resultMap>
+   
+   <resultMap type="gmvo" id="groupMemberRM">
+   	  <result property="memberVO.id" column="id"/>
+   	  <result property="groupVO.memberVO.id" column="gleader_id"/>
+   	  <result property="memberVO.name" column="name" />   
+      <result property="groupVO.gName" column="gname" />   
+      <result property="groupVO.gInfo" column="ginfo" />   
+      <result property="groupVO.gCount" column="gmember_count" javaType="int"/>
+      <result property="groupVO.gLocation" column="glocation"/>
+      <result property="groupVO.gDate" column="gdate"/>
+      <result property="curMember" column="cur_member"/>
+      <result property="groupVO.subjectVO.subject" column="gsubject"/>
+      <result property="groupVO.subjectVO.subjectCategory" column="subject_category"/>
+      <result property="groupVO.subjectVO.categoryImg" column="category_image"/>
+   </resultMap>
+   
+   <resultMap type="gjvo" id="groupJoinRM" extends="groupVORM">
+   	  <result property="gjNo" column="gjno"/>
+   	  <result property="gjTitle" column="gjtitle"/>
+   	  <result property="gjContent" column="gjcontent"/>
+   	  <result property="memberVO.id" column="id"/>
+   </resultMap>
+   
+   
+     <resultMap type="svo" id="subjectRM">
+     	<result property="subjectCategory" column=" subject_category"/>
+     	<result property="categoryImg" column="category_image"/>
+     </resultMap>
+   
+   <sql id="select">
+      select g.gleader_id as gleader_id, g.gname as gname, g.ginfo as ginfo, g.gmember_count as gmember_count, 
+      g.glocation as glocation, g.gsubject as gsubject, s.subject_category as subject_category, c.name as name, 
+      s.category_image as category_image, to_char(g.gdate, 'yyyy-mm-dd') as gdate, g.cur_member as cur_member
+      from cu_member c, cu_group g, cu_subject_category s
+    </sql>
+    
+    <sql id="getGroupInfo">
+      select g.gleader_id as gleader_id, g.gname as gname, g.ginfo as ginfo, g.gmember_count as gmember_count, 
+      g.glocation as glocation, g.gsubject as gsubject, s.subject_category as subject_category, 
+      s.category_image as category_image,  to_char(g.gdate, 'yyyy-mm-dd') as gdate, g.cur_member as cur_member
+    </sql>
+   
+   
+   <select id="getAllGroupList" resultMap="groupRM">
+      <include refid="select"/>
+      where c.id = g.gleader_id and g.gsubject = s.subject order by g.gdate desc
+   </select>
+   
+   <select id="getAllmyGroup" resultMap="groupRM">
+   	 <include refid="getGroupInfo"/>
+   	  from cu_group_member cgm, cu_group g, cu_subject_category s
+   	  where cgm.gleader_id = g.gleader_id and g.gsubject=s.subject and cgm.id=#{id}
+   </select>
+   
+   <select id="createMyGroupInfo" resultMap="groupRM">
+   	 <include refid="getGroupInfo"/>
+   		from  cu_group g, cu_subject_category s
+   		where g.gsubject=s.subject and g.gleader_id=#{id}
+   </select>
+   
+   <select id="getAllJoinRequestGroup" resultMap="groupRM">
+   	 <include refid="getGroupInfo"/>
+   		from cu_group_join cgj, cu_group g, cu_subject_category s
+   		where cgj.gleader_id=g.gleader_id and g.gsubject=s.subject and cgj.id=#{id}
+   </select>
+   
+    <select id="getAllSubject" resultMap="subjectRM">
+    	select subject from cu_subject_category where  subject_category=#{category}
+    </select>
+    
+    <select id="findMyGroupListBySubject"  resultMap="groupRM">
+       <include refid="getGroupInfo"/>
+   	  from cu_group_member cgm, cu_group g, cu_subject_category s
+   	  where cgm.gleader_id = g.gleader_id and g.gsubject=s.subject and s.subject=#{subject} and cgm.id=#{id}
+    </select>
+    
+    <select id="findGroupByLeaderId" resultMap="groupRM">
+    	 <include refid="getGroupInfo"/>
+    	from cu_group g, cu_subject_category s
+    	where g.gsubject=s.subject and g.gleader_id=#{id}
+    </select>
+    
+    
+    <select id="findGroupListByCategory"  resultMap="groupRM">
+         <include refid="getGroupInfo"/>
+        from cu_group_member cgm, cu_group g, cu_subject_category s
+        where cgm.gleader_id = g.gleader_id and g.gsubject=s.subject and s.subject_category=#{category} and cgm.id=#{id}
+    </select>
+    
+ 	<insert id="createGroup">
+ 		insert into cu_group
+ 		values(#{memberVO.id}, #{gName}, #{subjectVO.subject}, #{gInfo}, #{gCount}, #{gLocation}, sysdate, 1)
+ 	</insert>
+ 	
+ 	<insert id="addGroupMember">
+ 		insert into cu_group_member values(#{memberVO.id}, #{groupVO.memberVO.id})
+ 	</insert>
+ 	
+ 	<insert id="createGroupBoard">
+ 		create table ${value}(
+ 			gbno number primary key,
+ 			gbcategory varchar2(50) not null,
+ 			gbtitle varchar2(50) not null,
+ 			gbcontent clob not null,
+ 			gbdate date not null,
+ 			gbhits number not null,
+ 			id varchar2(50) not null,
+ 			gleader_id varchar2(50) not null,
+ 			fname varchar2(50),
+ 			ref number not null,
+  			restep number not null,
+            relevel number not null,
+            parent number default 1 not null,
+ 			foreign key(id) references cu_member(id),
+  		    foreign key(gleader_id) references cu_group(gleader_id)
+ 		)
+ 		
+ 	</insert>
+ 	
+ 	<insert id="createSequence">
+ 		create sequence ${value}_seq
+ 	</insert>
+ 	
+ 	<select id="findGroupListBySubjectCategory" resultMap="groupRM">
+      <include refid="select" />
+      where c.id = g.gleader_id and g.gsubject = s.subject and s.subject_category=#{subjectVO.subjectCategory}
+   </select>
+
+   <select id="findGroupListBySubject" resultMap="groupRM">
+      <include refid="select" />
+      where c.id = g.gleader_id and g.gsubject = s.subject and
+      s.subject=#{subjectVO.subject}
+   </select>
+
+   <select id="findGroupListByLocation" resultMap="groupRM"
+      parameterType="gvo">
+      <include refid="select" />
+      where c.id = g.gleader_id and g.gsubject = s.subject and
+      g.glocation=#{gLocation}
+   </select>
+   <select id="findGroupListByLocationAndSubjectCategory"
+      resultMap="groupRM" parameterType="map">
+      <include refid="select" />
+      where c.id = g.gleader_id and g.gsubject = s.subject and
+      g.glocation=#{gLocation} and s.subject_category=#{subjectCategory}
+   </select>
+
+   <select id="findGroupListByLocationAndSubject" resultMap="groupRM"
+      parameterType="map">
+      <include refid="select" />
+      where c.id = g.gleader_id and g.gsubject = s.subject and
+      g.glocation=#{gLocation} and s.subject=#{subject}
+   </select>
+
+   
+   <!-- location+gName -->
+   <select id="findGroupListByLocationAndGName" resultMap="groupRM"
+      parameterType="map">
+      <include refid="select" />
+      <![CDATA[ where c.id = g.gleader_id and g.gsubject = s.subject and g.glocation=#{gLocation} and (g.gname like '%' || #{gName} || '%' or g.ginfo like '%' || #{gName} || '%')]]>
+   </select>
+   
+   <!-- location + subject + gName -->
+   <select id="findGroupListByLocationAndSubjectAndGName"
+      resultMap="groupRM" parameterType="map">
+      <include refid="select" />
+      <![CDATA[ where c.id = g.gleader_id and g.gsubject = s.subject and s.subject=#{subject} and g.glocation=#{gLocation} and (g.gname like '%' || #{gName} || '%' or g.ginfo like '%' || #{gName} || '%')]]>
+   </select>
+   
+   <!-- Location+SubjectCategory+GName -->
+   <select id="findGroupListByLocationAndSubjectCategoryAndGName"
+      resultMap="groupRM" parameterType="map">
+      <include refid="select" />
+      <![CDATA[ where c.id = g.gleader_id and g.gsubject = s.subject and s.subject_category=#{subjectCategory} and g.glocation=#{gLocation} and (g.gname like '%' || #{gName} || '%' or g.ginfo like '%' || #{gName} || '%')]]>
+   </select>
+   
+   <!-- SubjectCategory+GName -->
+   <select id="findGroupListBySubjectCategoryAndGName" resultMap="groupRM"
+      parameterType="map">
+      <include refid="select" />
+      <![CDATA[ where c.id = g.gleader_id and g.gsubject = s.subject and s.subject_category=#{subjectCategory} and (g.gname like '%' || #{gName} || '%' or g.ginfo like '%' || #{gName} || '%')]]>
+   </select>
+   
+   <!-- Subject+GName -->
+   <select id="findGroupListBySubjectAndGName" resultMap="groupRM"
+      parameterType="map">
+      <include refid="select" />
+      <![CDATA[ where c.id = g.gleader_id and g.gsubject = s.subject and s.subject=#{subject} and (g.gname like '%' || #{gName} || '%' or g.ginfo like '%' || #{gName} || '%')]]>
+   </select>
+   
+   <!-- gNameKeyword -->
+   <select id="findGroupListByGNameKeyword" resultMap="groupRM"
+      parameterType="gvo">
+      <include refid="select" />
+      <![CDATA[ where c.id = g.gleader_id and g.gsubject = s.subject and (g.gname like '%' || #{gName} || '%' or g.ginfo like '%' || #{gName} || '%')]]>
+   </select>
+   
+   
+    
+    <!-- 내 가입 요청 그룹 찾기 시작 -->
+    <select id="findMyJoinGroupListByCategory" resultMap="groupRM">
+       <include refid="getGroupInfo" />
+       from cu_group_join cgj, cu_group g, cu_subject_category s
+         where cgj.gleader_id=g.gleader_id and g.gsubject=s.subject and s.subject_category=#{category} and cgj.id=#{id} 
+    </select>
+    
+    <select id="findMyJoinGroupListBySubject"  resultMap="groupRM">
+       <include refid="getGroupInfo" />
+       from cu_group_join cgj, cu_group g, cu_subject_category s
+         where cgj.gleader_id=g.gleader_id and g.gsubject=s.subject and s.subject = #{subject} and cgj.id=#{id}
+    </select>
+    
+    <!-- 내 가입 요청 그룹 찾기 끝 -->
+    
+    <delete id="deleteRequestGroup">
+    	delete from cu_group_join where id=#{id} and gleader_id=#{gLeaderId}
+    </delete>
+ 	
+ 	<select id = "getMemberList" resultType ="mvo">
+      select m.id, name, location, tel, gender, ((to_char(sysdate, 'YYYY')-to_char(birthdate, 'YYYY'))+1) as birthdate from cu_member m, cu_group_member gm where m.id = gm.id and gm.gleader_id = #{value} order by name asc
+   </select>
+   
+   	<select id="getAllMyCart" resultMap="groupRM">
+	    select g.gleader_id as gleader_id, g.gname as gname, g.ginfo as ginfo, g.gmember_count as gmember_count, 
+        g.glocation as glocation, g.gsubject as gsubject, s.subject_category as subject_category, 
+        s.category_image as category_image,  to_char(g.gdate, 'yyyy-mm-dd') as gdate, g.cur_member as cur_member
+	    from cu_cart c, cu_group g, cu_subject_category s
+	    where c.gleader_id = g.gleader_id and g.gsubject = s.subject and id=#{id}
+	</select>
+	
+	 <select id="findMyCartListBySubject"  resultMap="groupRM">
+       <include refid="getGroupInfo"/>
+   	  from cu_cart c, cu_group g, cu_subject_category s
+   	  where c.gleader_id = g.gleader_id and g.gsubject=s.subject and s.subject=#{subject} and c.id=#{id}
+    </select>
+    
+    <select id="findMyCartListByCategory"  resultMap="groupRM">
+         <include refid="getGroupInfo"/>
+        from cu_cart c, cu_group g, cu_subject_category s
+        where c.gleader_id = g.gleader_id and g.gsubject=s.subject and s.subject_category=#{category} and c.id=#{id}
+    </select>
+    
+    <select id="MyCartCount" resultType="int">
+    	select count(*) from cu_cart where id=#{id}
+    </select>
+    
+    <!-- 그룹멤버에서 그룹장아이디로 검색 후 삭제 -->
+    <delete id="deleteGroupMemberByGroupLeaderId">
+       delete cu_group_member where gleader_id=#{value}
+    </delete>
+    
+       <!-- 그룹보드 드롭  -->
+    <update id="dropGroupBoard">
+       drop table ${value}
+    </update>
+    <!-- 그룹보드 시퀀스 드롭 -->
+    <update id="dropGroupBoardSequence">
+       drop sequence ${value}_seq
+    </update>
+    
+	<insert id="waitlist" parameterType="map">
+       insert into cu_cart values(#{id}, #{gleaderId})
+    </insert>
+   
+    <select id = "checkCart" parameterType="map" resultType="int">
+       select count(*) from cu_cart where id=#{id} and gleader_id = #{gleaderId}
+    </select>
+    
+    <select id = "checkGroupMember" parameterType="map" resultType="int">
+         select count(*) from cu_group_member where id=#{id} and gleader_id = #{gleaderId}
+    </select>
+   
+    <update id="updateCurMember">
+      update cu_group set cur_member = cur_member+1 where gleader_id = #{gLeaderId}
+   </update>
+   
+   <select id="allGroupCount" resultType="int">
+   	  select count(*) from cu_group
+   </select>
+   
+    <!-- 그룹장 아이디로 조인 그룹 리스트 받아오기 -->  
+   <select id="getGroupJoinListByGroupLeaderId"  resultMap="groupRM">
+       <include refid="getGroupInfo" />
+       from cu_group_join cgj, cu_group g, cu_subject_category s
+         where cgj.gleader_id=g.gleader_id and g.gsubject=s.subject and cgj.gleader_id=#{value} 
+    </select>
+    
+    <!-- 그룹리더아이디로 그룹 조인 삭제 -->
+    <delete id="deleteGroupJoinByGroupLeaderId">
+       delete cu_group_join where gleader_id=#{value}
+    </delete>
+   
+  <!-- 그룹리더아이디로 그룹삭제  -->
+    <delete id="deleteGroupByLeaderId">
+       delete cu_group where gleader_id=#{value}
+    </delete>
+    
+    <!-- 그룹멤버에서 회원아이디로 검색 후 삭제 -->
+    <delete id="deleteGroupMemberById">
+       delete cu_group_member where id=#{value}
+    </delete>
+  
+    
+    <!-- 회원 아이디로 그룹 조인 삭제 -->
+    <delete id="deleteGroupJoinById">
+       delete cu_group_join where id=#{value}
+    </delete>
+    
+     <!-- 멤버 강퇴 -->
+   <delete id="getAwayGroupMember">
+      delete from cu_group_member where gleader_id=#{gLeaderId} and id=#{id}
+   </delete>
+   
+   <!-- 멤버 강퇴 후 현재 인원 감소 -->
+   <update id="downCurMember">
+      update cu_group set cur_member = cur_member-1 where gleader_id = #{gLeaderId}
+   </update>
+   
+   <delete id="deleteAllMember">
+      delete from cu_group_member where gleader_id = #{value}
+   </delete>
+   
+  <update id="updateGroup">
+       update cu_group set gname=#{gName}, gsubject=#{subjectVO.subject}, ginfo=#{gInfo}, gmember_count=#{gCount}, glocation=#{gLocation} 
+       where gleader_id=#{memberVO.id}  
+  </update>
+  
+  <!--  그룹명+그룹정보로 그룹검색 (메인화면) -->
+    <select id="findGroupListByGNameAndGInfo"  resultMap="groupRM">
+      <include refid="select" />
+      <![CDATA[ where c.id = g.gleader_id and g.gsubject = s.subject and (g.gname like '%' || #{value} || '%' or g.ginfo like '%' || #{value} || '%') ]]>
+   </select>
+    
+</mapper>       
+
+
+
+

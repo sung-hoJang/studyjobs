@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="schedule">
+	<resultMap type="schvo" id="scheduleRM">
+		<result property="gLeaderId" column="gleader_id" />
+		<result property="scheduleDate" column="schedule_date" />
+		<result property="scheduleInfo" column="schedule_info" />
+	</resultMap>
+
+    <insert id="submitSchedule" parameterType="schvo"> 
+  insert into cu_schedule(
+     no,id,gleader_id,schedule_date,schedule_info
+  )  values(cu_schedule_seq.nextval,#{id},#{gLeaderId},to_date(#{scheduleDate}, 'yyyy-mm-dd hh24:mi'),#{scheduleInfo})
+  </insert>
+  
+  <select id="getGroupScheduleListBygLeaderId"  resultMap="scheduleRM">
+  	select to_char(schedule_date, 'yyyy/mm/dd hh24:mi') as schedule_date, schedule_info, to_date(schedule_date, 'yyyy/mm/dd')-to_date(sysdate, 'yyyy/mm/dd') as deadline 
+  	from cu_schedule 
+  	where gleader_id=#{value}
+  	order by schedule_date asc 
+  </select>
+  
+  <select id="findScheduleByScheduleDate"  resultMap="scheduleRM" parameterType="schvo">
+     select to_char(schedule_date, 'yyyy/mm/dd hh24:mi') as schedule_date, schedule_info, schedule_date-sysdate as deadline 
+     from cu_schedule 
+     where gleader_id=#{gLeaderId} and schedule_date=to_date(#{scheduleDate}, 'yyyy/mm/dd hh24:mi')
+     order by schedule_date asc 
+  </select> 
+  
+  <update id="updateSchedule" parameterType="map"> 
+  update cu_schedule set schedule_date=to_date(#{schvo.scheduleDate}, 'yyyy/mm/dd hh24:mi'),schedule_info=#{schvo.scheduleInfo}
+  where gleader_id=#{schvo.gLeaderId} and schedule_date=to_date(#{orgDate}, 'yyyy/mm/dd hh24:mi')
+  </update>
+  
+  <delete id="deleteScheduleByScheduleDate" parameterType="schvo"> 
+  delete cu_schedule where gleader_id=#{gLeaderId} and schedule_date=to_date(#{scheduleDate}, 'yyyy/mm/dd hh24:mi')
+  </delete>
+  
+  <select id="findGroupPageScheduleByYearAndMonth" resultMap="scheduleRM">
+     select to_char(schedule_date, 'yyyy/mm/dd hh24:mi') as schedule_date, schedule_info, schedule_date-sysdate as deadline 
+     from cu_schedule 
+     where gleader_id=#{gLeaderId} and
+     <![CDATA[ 
+        (to_char(schedule_date, 'yyyy/mm/dd hh24:mi') like #{selectedYearMonth} || '%')
+     ]]>
+     order by schedule_date asc 
+  </select>
+  
+</mapper>

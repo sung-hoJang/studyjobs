@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="report">
+   <select id="showCount" resultType="rvo">
+      select keyword, count from cu_keyword_frequency
+   </select>
+ 
+      <insert id="insertCartReport" >
+      insert into cu_cart_frequency values(#{value},1)
+   </insert>
+   <update id="updateCartReport" >
+      update cu_cart_frequency set count=count+1 where gleader_id=#{value}
+   </update>
+   <select id="showCountCart" resultType="crvo">
+   <![CDATA[
+      SELECT gleader_id as gleaderId,count FROM(
+      SELECT gleader_id ,count,RANK() OVER(ORDER BY count DESC) AS RANKING FROM cu_cart_frequency
+      ) WHERE RANKING <= 5
+   ]]>
+   </select> 
+   
+    <select id="allSearchCount" resultType="int">
+            select count from cu_search_count
+   </select>
+   
+  <update id="updateSearchCount">
+        update cu_search_count set count=count+1
+  </update>
+   
+   <select id="totalVisitor" resultType="int">
+        select count from cu_total_visitor
+   </select>
+   
+   <update id="updateTotalVisitor">
+      update cu_total_visitor set count=count+1
+   </update> 
+   
+</mapper>  

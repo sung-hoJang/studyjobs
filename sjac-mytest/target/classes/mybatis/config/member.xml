@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- MyBatis에서 namespace는 필수적으로 명시해야 함 -->
+<mapper namespace="member">
+
+	 <resultMap type="slvo"  id="subjectLocationRM">
+      	<result property="gLocation" column="glocation" />
+     </resultMap>
+     
+     <resultMap type="schvo" id="scheduleRM">
+     	<result property="gLeaderId" column="gleader_id"/>
+     	<result property="scheduleDate" column="schedule_date"/>
+     	<result property="scheduleInfo" column="schedule_info"/>
+     	<result property="deadline" column="deadline"/>
+     	<result property="groupVO.gName" column="gname"/>
+     	<result property="groupVO.subjectVO.categoryImg" column="category_image"/>
+     </resultMap>
+   
+     <resultMap type="gmvo" id="groupMemberRM">
+     	<result property="groupVO.memberVO.id" column="gleader_id"/>
+     	<result property="memberVO.id" column="id"/>
+     </resultMap>
+     
+   
+	<select id="login" resultType="mvo">
+		select id, password, name, location, tel, gender, to_char(birthdate, 'YYYY-MM-DD') as birthdate  
+    	from cu_member where id=#{id} and password=#{password}
+	</select>
+	
+	<insert id="register" >
+ 	insert into cu_member
+ 	values(#{id}, #{password}, #{name}, #{location},#{tel},#{gender},to_date(#{birthdate}, 'yyyy-mm-dd'))
+ 	</insert>
+ 	
+ 	<select id="idcheck" resultType="int">
+       select count(*) from cu_member where id=#{id}
+    </select>
+    <select id="findMemberById" resultType="mvo">
+    	select id, password, name, location, tel, gender, to_char(birthdate, 'YYYY-MM-DD') as birthdate  
+    	from cu_member where id=#{id}
+    </select>
+    <update id="updateMyInfo">
+    	update cu_member set id=#{id}, password=#{password}, name=#{name}, location=#{location}, tel=#{tel}, 
+    	gender=#{gender}, birthdate=to_date(#{birthdate}, 'yyyy-mm-dd')
+    	where id=#{id}
+    </update>
+    <select id="getAllStudyLocation" resultMap="subjectLocationRM">
+    	select glocation as gLocation from cu_study_location
+    </select>
+    
+    <select id="findMyScheduleById" resultMap="scheduleRM">
+    	 select cs.no as no, cs.gleader_id as gleader_id, to_char(cs.schedule_date, 'yyyy-mm-dd hh24:mi') as schedule_date, 
+ 		 cs.schedule_info as schedule_info, g.gname as gname, s.category_image as category_image,
+ 		 to_char(cs.schedule_date, 'dd')-to_char(sysdate, 'dd') as deadline
+ 		 from cu_schedule cs, cu_group g, cu_subject_category s  
+ 		 where cs.gleader_id = g.gleader_id and g.gsubject=s.subject and id=#{id} 
+ 		 order by cs.schedule_date asc 
+    </select>
+
+ 	<select id="checkMyGroup" resultMap="groupMemberRM">
+ 		select gleader_id, id from cu_group_member where gleader_id=#{gLeaderId} and id=#{id}
+ 	</select>
+ 	
+ 	<insert id="test">
+ 		insert into ${value} values(#{id}, 'asd', 'asdf', '2', 'asdfg', 'asdfgh')
+ 	</insert>
+ 	
+	<insert id="addLastSchedule">
+		insert into cu_last_schedule values(cu_last_schedule_seq.nextval, #{id}, #{gLeaderId}, to_date(#{scheduleDate}, 'yyyy-mm-dd hh24:mi'), #{scheduleInfo})
+	</insert> 	
+	
+	<delete id="deleteLastSchedule">
+		delete from cu_schedule where gleader_id=#{gLeaderId} and schedule_date=to_date(#{scheduleDate}, 'yyyy-mm-dd hh24:mi')
+	</delete>
+	
+	<select id="findMyLastScheduleById" resultMap="scheduleRM">
+		 select cls.no as no, cls.gleader_id as gleader_id, to_char(cls.schedule_date, 'yyyy-mm-dd hh24:mi') as schedule_date, 
+ 		 cls.schedule_info as schedule_info, g.gname as gname, s.category_image as category_image,
+ 		 to_char(cls.schedule_date, 'dd')-to_char(sysdate, 'dd') as deadline
+ 		 from cu_last_schedule cls, cu_group g, cu_subject_category s  
+ 		 where cls.gleader_id = g.gleader_id and g.gsubject=s.subject and id=#{id} 
+ 		 order by cls.schedule_date asc 
+	</select>
+	
+	<select id="MyGroupCount" resultType="int">
+		select count(*) from cu_group_member where id=#{id}
+	</select>
+	
+	  <select id="findMyScheduleByGroupLeaderId" resultMap="scheduleRM" resultType="schvo"> <!--그룹장 아이디로 스케쥴 검색 (능) -->
+        select cs.no as no, cs.gleader_id as gleader_id, to_char(cs.schedule_date, 'yyyy-mm-dd hh24:mi') as schedule_date, 
+        cs.schedule_info as schedule_info, g.gname as gname, s.category_image as category_image,
+        cs.schedule_date-sysdate as deadline
+        from cu_schedule cs, cu_group g, cu_subject_category s  
+        where cs.gleader_id = g.gleader_id and g.gsubject=s.subject and gleader_id=#{value} 
+        order by cs.schedule_date asc 
+    </select>
+    
+    
+    <select id="findMyLastScheduleByGroupLeaderId" resultMap="scheduleRM"> <!--그룹장 아이디로 지난 스케쥴 검색 (능) -->
+        select cs.no as no, cs.gleader_id as gleader_id, to_char(cs.schedule_date, 'yyyy-mm-dd hh24:mi') as schedule_date, 
+        cs.schedule_info as schedule_info, g.gname as gname, s.category_image as category_image,
+        cs.schedule_date-sysdate as deadline
+        from cu_last_schedule cs, cu_group g, cu_subject_category s  
+        where cs.gleader_id = g.gleader_id and g.gsubject=s.subject and cs.gleader_id=#{value} 
+        order by cs.schedule_date asc 
+    </select>
+    
+     <!-- 회원 아이디로 그룹스케쥴 지우기-->
+     <delete id="deleteGroupScheduleById">
+       delete cu_schedule where id=#{value}
+    </delete>
+    
+    <!-- 회원 아이디로 지난 그룹스케쥴 지우기 -->
+    <delete id="deleteLastGroupScheduleById"> 
+       delete cu_last_schedule where id=#{value}
+    </delete>
+    
+    <!-- 그룹장 아이디로 그룹스케쥴 지우기 -->
+    <delete id="deleteGroupScheduleByGroupLeaderId"> 
+       delete cu_schedule where gleader_id=#{value}
+    </delete>
+    
+     <!-- 그룹장 아이디로 지난 그룹스케쥴 지우기 -->
+    <delete id="deleteLastGroupScheduleByGroupLeaderId">
+       delete cu_last_schedule where gleader_id=#{value}
+    </delete>
+    
+   <select id="getAllMemberList" resultType="mvo">
+       select id, password, name, location, tel, gender, to_char(birthdate, 'YYYY-MM-DD') as birthdate  
+       from cu_member
+    </select> 
+    
+    <delete id="deleteMyCart">
+    	delete from cu_cart where id=#{id} and gleader_id=#{gLeaderId}
+    </delete>
+    
+    <delete id="deleteMyCartById">
+       delete from cu_cart where id=#{id}
+    </delete>
+    
+    <delete id="deleteMyCartByGroupLeaderId">
+       delete from cu_cart where gleader_id=#{gLeaderId}
+    </delete>
+    
+    <select id="allMemberCount" resultType="int">
+    	select count(*) from cu_member
+    </select>
+    
+    <!-- 회원가입시 delete회원id체크 -->
+    <select id="idcheckFromDeleteMember" resultType="int">
+       select count(*) from cu_delete_member where id=#{id}
+    </select>
+    
+    <!-- 삭제 멤버 정보 DeleteMember 테이블로 이동 -->
+    <insert id="moveToDeleteMemberTable" >
+    insert into cu_delete_member
+    values(#{id}, #{password}, #{name}, #{location},#{tel},#{gender},to_date(#{birthdate}, 'yyyy-mm-dd'))
+    </insert>
+    
+    <delete id="deleteMemberById">
+     delete cu_member where id=#{value}  
+    </delete>
+    
+    
+    <!--아이디 찾기, 비밀번호 찾기 -->
+    <select id="findIdForUser" resultType="mvo">
+         select id from cu_member where name=#{name} and tel=#{tel}
+   </select>
+   
+   <select id="findPasswordForUser" resultType="mvo">
+         select password from cu_member where id=#{id} and tel=#{tel}
+   </select>
+   
+     <insert id="insertReason">
+          insert into cu_leave_reason values(cu_leave_reason_seq.nextval,#{reason}, #{detailreason})
+    </insert> 
+    
+
+</mapper>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

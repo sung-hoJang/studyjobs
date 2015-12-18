@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<!-- MyBatis  DataSource에 대한 설정 및  SQL 정의 xml 에 대한 매핑-->
+<configuration>	
+	<!-- 사용할 클래스에 대한 별칭을 명시한다.  -->
+	<typeAliases>
+		<typeAlias type="org.sjac.model.MemberVO" alias="mvo"/>
+		<typeAlias type="org.sjac.model.BoardVO" alias="bvo"/>
+		<typeAlias type="org.sjac.model.GroupVO" alias="gvo"/>
+		<typeAlias type="org.sjac.model.StudyLocationVO" alias="slvo"/>
+		<typeAlias type="org.sjac.model.GroupMemberVO" alias="gmvo"/>
+		<typeAlias type="org.sjac.model.GroupJoinVO" alias="gjvo"/>
+		<typeAlias type="org.sjac.aop.model.ReportVO" alias="rvo"/>
+		<typeAlias type="org.sjac.model.SubjectVO" alias="svo"/>		
+		<typeAlias type="org.sjac.model.ScheduleVO" alias="schvo"/>	
+		<typeAlias type="org.sjac.model.GroupBoardVO" alias="gbvo"/>
+		<typeAlias type="org.sjac.model.cart.CartReportVO" alias="crvo"/>   	
+	</typeAliases>	
+    <!-- sql mapping config xml 을 연결 -->
+	<mappers>
+		<mapper resource="mybatis/config/member.xml"/>		
+		<mapper resource="mybatis/config/board.xml"/>   
+		<mapper resource="mybatis/config/group.xml"/>   
+		<mapper resource="mybatis/config/report.xml"/>
+		<mapper resource="mybatis/config/join.xml"/>
+		<mapper resource="mybatis/config/subject.xml"/>
+		<mapper resource="mybatis/config/groupBoard.xml"/>
+		<mapper resource="mybatis/config/schedule.xml"/>      
+	</mappers>
+</configuration>
+
+
+
+
+
+
+
+
+
+

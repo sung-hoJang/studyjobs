@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+타일즈 설정파일
+-->
+ <!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+ <!-- 컨트롤러에서 view name을 아래 definition name으로
+ 		반환하면 TilesViewResolver에 의해 include 된 여러 페이지
+ 		조합결과 화면이 반환된다.
+  -->
+<tiles-definitions>	 	
+	<definition name="group" template="/WEB-INF/views/templates/group_layout.jsp">
+		<put-attribute name="header" value="/WEB-INF/views/templates/header2.jsp"></put-attribute>
+		<put-attribute name="mainpart" value="/WEB-INF/views/group/main_boardlist.jsp"></put-attribute>
+		<put-attribute name="right" value="/WEB-INF/views/templates/right.jsp"></put-attribute>
+		<put-attribute name="footer" value="/WEB-INF/views/templates/footer1.jsp"></put-attribute>
+	</definition> 
+	
+	<definition name="nonMember" template="/WEB-INF/views/group/nonmember_home.jsp">
+		<put-attribute name="header" value="/WEB-INF/views/templates/header3.jsp"></put-attribute>
+		<put-attribute name="main" value="/WEB-INF/views/group/nonmember_main.jsp"></put-attribute>
+<!-- 		<put-attribute name="right" value="/WEB-INF/views/templates/right.jsp"></put-attribute> -->
+		<put-attribute name="footer" value="/WEB-INF/views/templates/footer1.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="group_memberlist" extends = "group">
+      <put-attribute name="mainpart" value="/WEB-INF/views/group/memberlist.jsp"></put-attribute>
+   </definition>
+   
+   <definition name="group_board_*" extends = "group">
+      <put-attribute name="mainpart" value="/WEB-INF/views/group/board/{1}.jsp"></put-attribute>
+   </definition>
+	
+	<definition name="group_leader_*" extends="group">
+         <put-attribute name="mainpart" value="/WEB-INF/views/group/leader/{1}.jsp"></put-attribute>
+   </definition>
+   
+      <definition name="group_schedule" extends = "group">
+      <put-attribute name="mainpart" value="/WEB-INF/views/group/schedule.jsp"></put-attribute>
+   </definition>
+   
+   <definition name="group_updateschedule" extends = "group">
+      <put-attribute name="mainpart" value="/WEB-INF/views/group/updateschedule.jsp"></put-attribute>
+   </definition>
+   
+   <definition name="group_leader_delete" extends = "group">
+      <put-attribute name="mainpart" value="/WEB-INF/views/group/leader/delete.jsp"></put-attribute>
+   </definition>
+   
+</tiles-definitions>
+
+
+
+
+
+
+

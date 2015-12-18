@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+    <insert id="write" parameterType="bvo">
+    <selectKey keyProperty="no" resultType="int" order="BEFORE">
+      select cu_board_seq.nextval from dual
+   </selectKey>  
+  insert into cu_board(
+     no,category,content,title,id,mydate,hits,ref,restep,relevel
+  )  values(#{no},#{category},#{content},#{title},#{memberVO.id},sysdate,0,#{no},0,0)
+  </insert>
+   <select id="totalContent" resultType="int">
+      select count(*) from cu_board
+   </select>
+   <resultMap type="bvo" id="boardListRM">      
+      <result property="myDate" column="mydate" />
+      <result property="memberVO.id" column="id" />         
+   </resultMap>
+   <select id="getBoardList" resultMap="boardListRM">
+   SELECT no,category,title,id,mydate,hits,ref,restep,relevel,parent 
+                   FROM(    
+                        SELECT no,category,title,id,mydate,hits,
+                        CEIL(rownum/7) AS page,ref,restep,relevel,parent  
+                        FROM ( 
+                           SELECT no,category,title,id,
+                           to_char(mydate,'YYYY.MM.DD') as mydate,
+                           hits,ref,restep,relevel,parent 
+                           FROM cu_board where category='일반글'
+                           order by ref desc,restep asc  
+                            ) 
+    ) WHERE PAGE=#{value}
+   </select>
+   
+   <select id="findBoardListByTitleAndContent" resultMap="boardListRM" parameterType="map">
+   SELECT no,category,title,content,id,mydate,hits,ref,restep,relevel,parent 
+                   FROM(    
+                        SELECT no,category,title,content,id,mydate,hits,
+                        CEIL(rownum/7) AS page,ref,restep,relevel,parent  
+                        FROM ( 
+                           SELECT no,category,title,content,id,
+                           to_char(mydate,'YYYY.MM.DD') as mydate,
+                           hits,ref,restep,relevel,parent 
+                           FROM cu_board WHERE category='일반글'
+                           and <![CDATA[ (title like '%' || #{keyText} || '%' or content like '%' || #{keyText} || '%') ]]>
+                           order by ref desc,restep asc  
+                            ) 
+    ) WHERE PAGE=#{pageNo} 
+   </select>
+   
+   <select id="getAnnouncementList" resultMap="boardListRM">
+      select no,category,title,id,to_char(mydate,'YYYY.MM.DD') as mydate,hits,ref,restep,relevel,parent 
+      from cu_board where category='공지' and restep=0
+      order by no desc
+   </select>   
+   <select id="getBoard" resultMap="boardListRM">
+      select ref, restep from cu_board where no=#{value}
+   </select>
+   <select id="showContent"  resultMap="boardListRM">
+   select no,category,content,title,id, to_char(mydate, 'yyyy-mm-dd hh24:mi:ss') as mydate,ref,restep,relevel
+   from cu_board 
+   where no=#{value}
+   </select>
+   <update id="updateCount" parameterType="int">
+   update cu_board set hits=hits+1 where no=#{no}
+   </update>
+   <delete id="deleteBoard">
+   delete from cu_board where no=#{value}
+   </delete>
+   <update id="updateBoard" parameterType="bvo">
+   update cu_board set title=#{title},content=#{content}
+   where no=#{no}
+   </update>
+   <update id="updateRestep" parameterType="hashmap">
+    UPDATE    cu_board 
+        SET       restep = restep+1
+       WHERE     ref=#{ref}
+        AND       restep > #{restep}
+    </update>
+   <select id="getCategory"  resultType="string">
+        select category from cu_board where ref=#{ref} and restep=0 and relevel=0
+   </select>
+    <insert id="writeReply" parameterType="bvo">
+       <selectKey keyProperty="no" resultType="int" order="BEFORE">
+          select cu_board_seq.nextval from dual 
+       </selectKey>
+       insert into cu_board
+       (no,category,content,title,id,mydate,hits,ref,restep,relevel)
+       values(#{no},#{category},#{content},#{title},#{memberVO.id},sysdate,0,#{ref},#{restep},#{relevel})
+    </insert>
+    <update id="updateChild" parameterType="bvo">
+       update cu_board
+          set parent= 0
+          where ref=#{ref}
+          AND restep = #{restep}+1
+    </update>
+
+</mapper>       
+ 
+ 

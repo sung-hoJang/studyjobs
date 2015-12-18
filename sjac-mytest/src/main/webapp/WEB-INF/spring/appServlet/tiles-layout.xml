@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+타일즈 설정파일
+-->
+ <!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+ <!-- 컨트롤러에서 view name을 아래 definition name으로
+ 		반환하면 TilesViewResolver에 의해 include 된 여러 페이지
+ 		조합결과 화면이 반환된다.
+  -->
+  
+  <!-- header, main, footer만 있는 레이아웃 -->
+<tiles-definitions>	 	
+	<definition name="basic" template="/WEB-INF/views/templates/basic.jsp">
+		<put-attribute name="header" value="/WEB-INF/views/templates/header.jsp"></put-attribute>
+		<put-attribute name="footer" value="/WEB-INF/views/templates/footer.jsp"></put-attribute>
+		<put-attribute name="main" value=""></put-attribute>
+	</definition> 
+	
+	<definition name="basic2" template="/WEB-INF/views/templates/basic2.jsp">
+		<put-attribute name="header" value="/WEB-INF/views/templates/header.jsp"></put-attribute>
+		<put-attribute name="accountheader" value="/WEB-INF/views/templates/accountheader.jsp"></put-attribute>
+		<put-attribute name="footer" value="/WEB-INF/views/templates/footer.jsp"></put-attribute>
+		<put-attribute name="main" value=""></put-attribute>
+	</definition> 
+
+	
+	<!--
+		 sublayout.jsp의 레이아웃 형태
+		 
+		 헤더
+		 어카운트헤더
+		 레프트	메인
+		 푸터
+		 
+		 로 구성
+	 -->
+	<definition name="sublayout" template="/WEB-INF/views/templates/sublayout.jsp">
+		<put-attribute name="header" value="/WEB-INF/views/templates/header.jsp"></put-attribute>
+		<put-attribute name="footer" value="/WEB-INF/views/templates/footer.jsp"></put-attribute>
+		<put-attribute name="left" value="/WEB-INF/views/templates/left.jsp"></put-attribute>
+		<put-attribute name="accountheader" value="/WEB-INF/views/templates/accountheader.jsp"></put-attribute>
+		<put-attribute name="main" value=""></put-attribute>
+	</definition> 
+	
+	<definition name="home" template="/WEB-INF/views/templates/layout.jsp">
+		<put-attribute name="hero" value="/WEB-INF/views/templates/hero.jsp"></put-attribute>
+		<put-attribute name="header" value="/WEB-INF/views/templates/header.jsp"></put-attribute>
+		<put-attribute name="footer" value="/WEB-INF/views/templates/footer.jsp"></put-attribute>
+		<put-attribute name="homegroup" value="/WEB-INF/views/main/homegroup.jsp"></put-attribute>
+<!-- 		<put-attribute name="homelogin" value="/WEB-INF/views/main/homelogin.jsp"></put-attribute> -->
+		<put-attribute name="chart" value="/WEB-INF/views/main/chart.jsp"></put-attribute>
+		<put-attribute name="counter" value="/WEB-INF/views/templates/counter.jsp"></put-attribute>
+	</definition>
+	
+</tiles-definitions>
+
+
+
+
+
+
+

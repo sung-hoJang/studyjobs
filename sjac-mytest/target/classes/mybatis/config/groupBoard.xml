@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="groupBoard">
+     <resultMap type="gbvo" id="groupBoardListRM">
+         <result property="gbNo" column="gbno" />   
+         <result property="gbCategory" column="gbcategory" />   
+         <result property="gbTitle" column="gbtitle" />   
+         <result property="gbContent" column="gbcontent" />   
+         <result property="gbDate" column="gbdate" />   
+         <result property="gbHits" column="gbhits"/>
+           <result property="memberVO.id" column="id" />   
+           <result property="groupVO.memberVO.id" column="gleader_id" />
+   </resultMap>
+   <select id="totalContent" parameterType="string" resultType="int">
+      select count(*) from ${value}
+   </select>
+   <select id="getGroupBoardList" parameterType = "map" resultMap="groupBoardListRM">
+             SELECT gbno,gbcategory,gbtitle,gbdate,gbhits,id,ref,restep,relevel,parent 
+                      FROM(    
+                           SELECT gbno,gbcategory,gbtitle,gbdate,gbhits,id,
+                           CEIL(rownum/7) AS page,ref,restep,relevel,parent  
+                           FROM ( 
+                              SELECT gbno,gbcategory,gbtitle,
+                              to_char(gbdate,'YYYY.MM.DD') as gbdate,
+                              gbhits,id,ref,restep,relevel,parent 
+                              FROM ${gbtable}
+                              order by ref desc,restep asc  
+                               ) 
+       ) WHERE PAGE=#{page}
+       </select>
+       
+        <select id="findboardListTitleAndContent" parameterType = "map" resultMap="groupBoardListRM">
+             SELECT gbno,gbcategory,gbtitle,gbdate,gbhits,id,ref,restep,relevel,parent 
+                      FROM(    
+                           SELECT gbno,gbcategory,gbtitle,gbdate,gbhits,id,
+                           CEIL(rownum/7) AS page,ref,restep,relevel,parent  
+                           FROM ( 
+                              SELECT gbno,gbcategory,gbtitle,
+                              to_char(gbdate,'YYYY.MM.DD') as gbdate,
+                              gbhits,id,ref,restep,relevel,parent 
+                              FROM ${gbtable}
+                              WHERE  <![CDATA[ (gbtitle like '%' || #{keyText} || '%' or gbcontent like '%' || #{keyText} || '%') ]]>
+                              order by ref desc,restep asc  
+                               ) 
+       ) WHERE PAGE=#{page}
+       </select>    
+       
+        <select id="findBoardListByCategory" parameterType = "map" resultMap="groupBoardListRM">
+             SELECT gbno,gbcategory,gbtitle,gbdate,gbhits,id,ref,restep,relevel,parent 
+                      FROM(    
+                           SELECT gbno,gbcategory,gbtitle,gbdate,gbhits,id,
+                           CEIL(rownum/7) AS page,ref,restep,relevel,parent  
+                           FROM ( 
+                              SELECT gbno,gbcategory,gbtitle,
+                              to_char(gbdate,'YYYY.MM.DD') as gbdate,
+                              gbhits,id,ref,restep,relevel,parent 
+                              FROM ${gbtable}
+                              WHERE  <![CDATA[ gbcategory like '%' || #{category} || '%']]>
+                              order by ref desc,restep asc  
+                               ) 
+       ) WHERE PAGE=#{page}
+       </select>
+       
+         <select id="findCategorizedList" parameterType = "map" resultMap="groupBoardListRM">
+             SELECT gbno,gbcategory,gbtitle,gbdate,gbhits,id,ref,restep,relevel,parent 
+                      FROM(    
+                           SELECT gbno,gbcategory,gbtitle,gbdate,gbhits,id,
+                           CEIL(rownum/7) AS page,ref,restep,relevel,parent  
+                           FROM ( 
+                              SELECT gbno,gbcategory,gbtitle,
+                              to_char(gbdate,'YYYY.MM.DD') as gbdate,
+                              gbhits,id,ref,restep,relevel,parent 
+                              FROM ${gbtable}
+                              WHERE  <![CDATA[ gbcategory like '%' || #{category} || '%' and (gbtitle like '%' || #{keyText} || '%' or gbcontent like '%' || #{keyText} || '%')]]>
+                              order by ref desc,restep asc  
+                               ) 
+       ) WHERE PAGE=#{page}
+       </select>
+       
+<insert id="write" parameterType="map">
+    <selectKey keyProperty="no" resultType="int" order="BEFORE">
+      select ${gbtable}_seq.nextval from dual
+   </selectKey>  
+  insert into ${gbtable}(
+     gbno,gbcategory,gbtitle,gbcontent,gbdate,gbhits,id,gleader_id, fname, ref,restep,relevel
+  )  values(#{no},#{gbvo.gbCategory},#{gbvo.gbTitle},#{gbvo.gbContent},sysdate,0,#{gbvo.memberVO.id}, #{gbtable}, #{gbvo.fname},#{no},0,0)
+  </insert>
+  <insert id="writeUpload" parameterType="map">
+    <selectKey keyProperty="no" resultType="int" order="BEFORE">
+      select ${gbtable}_seq.nextval from dual
+   </selectKey>  
+  insert into ${gbtable}(
+     gbno,gbcategory,gbtitle,gbcontent,gbdate,gbhits,id,gleader_id, fname, ref,restep,relevel
+  )  values(#{no},#{gbvo.gbCategory},#{gbvo.gbTitle},#{gbvo.gbContent},sysdate,0,#{gbvo.memberVO.id},#{gbtable},#{gbvo.fname},#{no},0,0)
+  </insert>
+  
+  <update id="updateCount" parameterType="map">
+   update ${gbtable} set gbhits=gbhits+1 where gbno=#{no}
+</update>
+
+<select id="showContent"  parameterType = "map" resultMap="groupBoardListRM">
+   select gbno,gbcategory,gbtitle,gbcontent,to_char(gbdate, 'yyyy-mm-dd hh24:mi:ss') as gbdate,gbhits,id,gleader_id, fname, ref,restep,relevel
+   from ${gbtable} 
+   where gbno=#{no}
+</select>
+
+   <select id="getGroupBoard" parameterType="map" resultMap="groupBoardListRM">
+      select ref, restep from ${gbtable} where gbno=#{no}
+   </select>
+   
+    <update id="updateChild" parameterType="map">
+       update ${gbtable}
+          set parent= 0
+          where ref=#{gbvo.ref}
+          AND restep = #{gbvo.restep}+1
+    </update>
+    
+    <delete id="deleteGroupBoard" parameterType="map">
+      delete from ${gbtable} where gbno=#{no}
+   </delete>
+   
+   <update id="updateGroupBoard" parameterType="map">
+   update ${gbtable} set gbtitle=#{gbvo.gbTitle},gbcontent=#{gbvo.gbContent}
+   where gbno=#{gbvo.gbNo}
+   </update>
+   
+   <update id="updateRestep" parameterType="map">
+    UPDATE    ${gbtable} 
+        SET       restep = restep+1
+       WHERE     ref=#{gbvo.ref}
+        AND       restep > #{gbvo.restep}
+    </update>
+    
+    <select id="getCategory" parameterType="map" resultType="string">
+        select gbCategory from ${gbtable} where ref=#{gbvo.ref} and restep=0 and relevel=0
+   </select>
+   
+   <insert id="writeReply" parameterType="map">
+       <selectKey keyProperty="no" resultType="int" order="BEFORE">
+          select ${gbtable}_seq.nextval from dual 
+       </selectKey>
+       insert into ${gbtable}(
+        gbno,gbcategory,gbtitle,gbcontent,gbdate,gbhits,id,gleader_id, ref,restep,relevel
+  )  values(#{no},#{gbvo.gbCategory},#{gbvo.gbTitle},#{gbvo.gbContent},sysdate,0,#{gbvo.memberVO.id},#{gbtable},#{gbvo.ref},#{gbvo.restep},#{gbvo.relevel})
+    </insert>
+    
+    <!-- 그룹홈 -->
+    <select id="getGroupBoardTest" resultMap="groupBoardListRM" >
+      select * from ${value} where relevel = 0 order by gbno desc
+    </select>   
+    
+</mapper>          
+
+
+
