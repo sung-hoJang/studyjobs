@@ -56,9 +56,9 @@
          개발시에는 workspace 경로를 주입시키고  
          운영시에는 실제 서버 경로를 주입시킨다. 
          운영 업로드 경로
-         C:\java-kosta\WAS\spring2-tomcat\webapps\springmvc26-fileupload\upload -->
+         C:\java-kosta\WAS\sjac-tomcat\webapps\sjac-project\upload -->
    <bean id="uploadPath" class="java.lang.String" >
-       <constructor-arg value = "C:\\java-kosta\\sjac-workspace\\sjac-mytest\\src\\main\\webapp\\upload\\"/>
+       <constructor-arg value = "C:\java-kosta\WAS\sjac-tomcat\webapps\sjac-project\upload\"/>
    </bean>
    <bean id="beanNameViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
    <property name="order" value="1"></property>
