@@ -56,10 +56,6 @@ public class ScheduleDAOImpl implements ScheduleDAO{
 	      
 	   }
 	  
-	  @Override
-	   public List<ScheduleVO> findMyScheduleByGroupLeaderId(String id) {
-	      return sqlSessionTemplate.selectList("member.findMyScheduleByGroupLeaderId", id);
-	   }
 
 	@Override
 	public List<ScheduleVO> getGroupScheduleListBygLeaderId(String gLeaderId) {
