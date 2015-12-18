@@ -61,6 +61,7 @@ public class TransactionServiceImpl implements TransactionService {
 		cartDAO.deleteMyCart(map);
 	}
 
+	
 	@Override
 	public void joinTransaction(String gLeaderId, String[] acceptList) {
 		Map<String, String> map = new HashMap<String, String>();

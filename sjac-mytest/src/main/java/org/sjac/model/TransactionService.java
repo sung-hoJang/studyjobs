@@ -15,6 +15,15 @@ public interface TransactionService {
 	 * @throws Exception
 	 */
 	public abstract void TransactionAll(GroupVO gvo, GroupMemberVO gmvo) throws Exception;
+	
+	/**
+	 * 
+	 * 일정이 지난 스케줄을 CU_SCHEDULE에서 삭제
+	 * 일정이 지난 스케줄을 CU_LAST_SCHEDULE에 추가
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
 	public abstract List<ScheduleVO> ScheduleTransaction(String id) throws Exception;
 	
 	/**
@@ -40,8 +49,41 @@ public interface TransactionService {
 	 * @param id
 	 */
 	public abstract void deleteMemberTransaction(String id);
+	
+	/**
+	 * <가입요청>
+	 * 원하는 그룹에 가입 요청
+	 * 해당 그룹이 찜되어있으면 찜 리스트에서 삭제
+	 * @param gjvo
+	 */
 	public abstract void joinGroupTransaction(GroupJoinVO gjvo);
+	
+	
+	/**
+	 * <그룹원 승인>
+	 * 가입 요청글을 가입요청 테이블에서 삭제
+	 * 가입 요청을 한 회원을 해당 그룹의 멤버로 추가
+	 * 해당 그룹의 현재인원을 증가  
+	 * @param gLeaderId : 그룹장 아이디
+	 * @param acceptList : 가입 요청 리스트
+	 */
 	public abstract void joinTransaction(String gLeaderId, String[] acceptList);
+	
+	/**
+	 * <그룹원 강퇴>
+	 * 강퇴할 그룹원을 그룹맴버에서 삭제
+	 * 해당 그룹의 현재인원을 감소
+	 * @param id : 강퇴할 회원 아이디
+	 * @param gLeaderId : 
+	 */
 	public abstract void getAwayGroupMemberTransaction(String id, String gLeaderId);
+	
+	/**
+	 * <그룹 탈퇴>
+	 * 회원이 그룹에서 탈퇴
+	 * 해당 그룹의 현재인원 1 감소
+	 * @param id : 탈퇴할 회원 아이디
+	 * @param gLeaderId
+	 */
 	public abstract void leaveThisGroupTransaction(String id, String gLeaderId);
 }
