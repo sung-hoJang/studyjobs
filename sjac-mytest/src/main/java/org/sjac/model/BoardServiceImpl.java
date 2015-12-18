@@ -83,7 +83,7 @@ public class BoardServiceImpl implements BoardService {
       bvo.setRestep(restep + 1);
       bvo.setRelevel(relevel + 1);
       boardDAO.getCategory(bvo);
-      boardDAO.insertRefContent(bvo);// 답변 글 입력
+      boardDAO.insertRefContent(bvo);
    }
 
    
