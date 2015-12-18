@@ -667,3 +667,186 @@ drop table cu_subject_category;
 drop sequence cu_board_seq;
 drop table cu_board;
 drop table cu_member;
+
+
+업그레이드 크리에이트 순서
+
+create table cu_member(
+   id varchar2(50) primary key,
+   password varchar2(50) not null,
+   name varchar2(50) not null,
+   location varchar2(50) not null,
+   tel varchar2(50) not null,
+   gender varchar2(50) not null,
+   birthdate date not null
+)
+
+create table cu_board(
+   no number primary key,
+   category varchar2(50) not null,
+   content clob not null,
+   title varchar2(50) not null,
+   id varchar2(50) not null,
+   mydate date not null,
+   hits number default 0 not null,
+   ref number not null,
+   restep number not null,
+   relevel number not null,
+   parent number default 1 not null,
+   foreign key (id) references cu_member(id)
+)
+
+
+create sequence cu_board_seq;
+
+create table cu_subject_category(
+   subject varchar2(50) primary key,
+   subject_category varchar2(50) not null,
+   category_image varchar2(300) not null
+)
+
+create table cu_study_location(
+   glocation varchar2(50) primary key
+)
+
+create table cu_group(
+   gleader_id varchar2(50) primary key,
+   gname varchar2(50) not null,
+   gsubject varchar2(50) not null,      
+   ginfo clob not null,
+   gmember_count number not null,
+   glocation varchar2(50) not null,
+   gdate date not null,
+   cur_member number not null,
+   foreign key(gsubject) references cu_subject_category(subject),
+   foreign key(glocation) references cu_study_location(glocation)
+)
+
+create table cu_cart(
+   id varchar2(50) not null,
+   gleader_id varchar2(50) not null,
+   foreign key(id) references cu_member(id),
+   foreign key(gleader_id) references cu_group(gleader_id),
+   constraint pk_cu_cart primary key (id, gleader_id)
+)
+
+create table cu_group_member(
+   id varchar2(50) not null,
+   gleader_id varchar2(50) not null,
+   foreign key(id) references cu_member(id),
+   foreign key(gleader_id) references cu_group(gleader_id),
+   constraint pk_cu_group_member primary key (id, gleader_id)
+)
+
+create table cu_schedule(
+   no number primary key,
+   id varchar2(50) not null,
+   gleader_id varchar2(50) not null,
+   schedule_date date not null,
+   schedule_info clob not null,
+   foreign key(id, gleader_id) references cu_group_member(id, gleader_id)
+)
+
+create sequence cu_schedule_seq;
+
+
+create table cu_last_schedule(
+   no number primary key,
+   id varchar2(50) not null,
+   gleader_id varchar2(50) not null,
+   schedule_date date not null,
+   schedule_info clob not null,
+   foreign key(id, gleader_id) references cu_group_member(id, gleader_id)
+)
+
+
+create sequence cu_last_schedule_seq;
+
+create table cu_group_join (
+   gjno number primary key,
+   id varchar2(50) not null,
+   gjtitle varchar2(50) not null,
+   gjcontent clob not null,
+   gleader_id varchar2(50) not null,
+   constraint fk_cu_member foreign key(id) references cu_member(id),
+   constraint fk_cu_group foreign key(gleader_id) references cu_group(gleader_id)
+)
+
+create sequence cu_group_join_seq;
+
+create table cu_group_board(
+   gbno number primary key,
+   gbcategory varchar2(50) not null,
+   gbtitle varchar2(50) not null,
+   gbcontent clob not null,
+   gbdate date not null,
+   gbhits number not null,
+   id varchar2(50) not null,
+   gleader_id varchar2(50) not null,
+   ref number not null,
+   restep number not null,
+   relevel number not null,
+   parent number default 1 not null,
+   foreign key(id) references cu_member(id),
+   foreign key(gleader_id) references cu_group(gleader_id)
+)
+
+drop table cu_group_board;
+create sequence cu_group_board_seq;
+
+create table cu_keyword_frequency(
+   keyword varchar2(50) primary key,
+   count number not null
+)
+
+
+create table cu_delete_member(
+   id varchar2(50) primary key,
+   password varchar2(50) not null,
+   name varchar2(50) not null,
+    location varchar2(50) not null,
+    tel varchar2(50) not null,
+    gender varchar2(50) not null,
+    birthdate date not null
+)
+
+
+create table cu_delete_group(
+   gleader_id varchar2(50) primary key,
+   gname varchar2(50) not null,
+   gsubject varchar2(50) not null,      
+   ginfo varchar2(50) not null,
+   gmember_count number not null,
+   glocation varchar2(50) not null,
+   gdate date not null,
+   foreign key(gsubject) references cu_subject_category(subject),
+   foreign key(glocation) references cu_study_location(glocation)
+)
+
+
+create table cu_cart_frequency(
+   gleader_id varchar2(50) primary key,
+   count number not null
+)
+
+
+create table cu_search_count(
+   count number not null
+)
+
+insert into cu_search_count values(0);
+
+create table cu_total_visitor(
+   count number not null
+)
+
+insert into cu_total_visitor values(0);
+
+create table cu_leave_reason(
+   no number primary key,
+   reason varchar2(200) not null,
+   detailreason clob not null
+)
+
+
+create sequence cu_leave_reason_seq;
