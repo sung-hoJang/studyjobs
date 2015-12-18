@@ -6,8 +6,9 @@
         <ul class="pull-left footer-menu">
             <li>
                 <a href="home.do"> Home </a>
-                <a href="about.html"> About us </a>
-                <a href="contact.html"> Contact us </a>
+                Copyright  &copy;쉽지않조 Corp. All Rights Reserved.
+               <!--  <a href="about.html"> About us </a>
+                <a href="contact.html"> Contact us </a> -->
             </li>
         </ul>
         <ul class="pull-right footer-menu">
