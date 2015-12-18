@@ -644,12 +644,26 @@ create sequence grouptest_seq;
 select * from cu_group where gleader_id='grouptest'
 	    
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	    
-	    
-	    
-	    
-	    
-	    
-	    
-	    
-	    
+
+
+drop table cu_leave_reason;
+drop table cu_total_visitor;
+drop table cu_search_count;
+drop table cu_cart_frequency;
+drop table cu_delete_group;
+drop table cu_delete_member;
+drop table cu_keyword_frequency;
+drop table cu_group_join;
+drop sequence cu_group_join_seq;
+drop sequence cu_last_schedule_seq;
+drop table cu_last_schedule;
+drop table cu_schedule;
+drop sequence cu_schedule_seq;
+drop table cu_group_member;
+drop table cu_cart;
+drop table cu_group;
+drop table cu_study_location;
+drop table cu_subject_category;
+drop sequence cu_board_seq;
+drop table cu_board;
+drop table cu_member;
