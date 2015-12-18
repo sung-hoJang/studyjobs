@@ -65,11 +65,6 @@ public class GroupBoardDAOImpl implements GroupBoardDAO{
    }
 
    @Override
-   public String getCategory(Map<String, Object> gbmap) {
-      return sqlSessionTemplate.selectOne("groupBoard.getCategory", gbmap);            
-   }
-
-   @Override
    public void insertRefContent(Map<String, Object> gbmap) {
       sqlSessionTemplate.insert("groupBoard.writeReply", gbmap);            
    }
