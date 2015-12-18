@@ -90,7 +90,6 @@ import org.springframework.web.servlet.ModelAndView;
             String extension = "";
             if( !fileName.equals("") )
                extension = fileName.substring(fileName.lastIndexOf("."));
-            
             gbmap.put("gbvo", gbvo);
             groupBoardService.write(gbmap);
             // 업로드 파일이 있으면 파일을 특정경로로 업로드한다
@@ -99,6 +98,7 @@ import org.springframework.web.servlet.ModelAndView;
                   list.get(i).transferTo(
                         new File(path + gbmap.get("gbtable") + "_"
                               + gbmap.get("no") + extension));
+                  System.out.println(path);
                } catch (Exception e) {
                   e.printStackTrace();
                }

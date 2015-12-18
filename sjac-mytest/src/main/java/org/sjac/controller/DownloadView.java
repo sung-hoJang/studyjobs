@@ -29,6 +29,7 @@ public class DownloadView extends AbstractView {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		String path = (String) map.get("path");
+		System.out.println(path);
 		String filename = request.getParameter("filename");
 		String fname = request.getParameter("fname");
 		String extension = fname.substring(fname.lastIndexOf("."));
@@ -47,5 +48,11 @@ public class DownloadView extends AbstractView {
 		// 업로드된 파일을 입력받기 위한 입력스트림
 		FileInputStream fis = new FileInputStream(file);
 		FileCopyUtils.copy(fis, os);
+		System.out.println(fis);
+		System.out.println(path);
 	}
 }
+
+
+
+

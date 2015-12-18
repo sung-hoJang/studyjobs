@@ -59,7 +59,7 @@
          C:\java-kosta\WAS\sjac-tomcat\webapps\sjac-project\upload -->
    <bean id="uploadPath" class="java.lang.String" >
 
-       <constructor-arg value = "C:\java-kosta\WAS\sjac-tomcat\webapps\sjac-project\upload\"/>
+       <constructor-arg value = "C:\\java-kosta\\WAS\\sjac-tomcat\\webapps\\sjac-project\\upload\\"/>
    </bean>
    <bean id="beanNameViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
    <property name="order" value="1"></property>
