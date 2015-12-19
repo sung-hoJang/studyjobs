@@ -48,7 +48,11 @@
                         <i class="fa fa-trash-o"></i> 얘 강퇴
                      </a>   
                </c:when>
-
+				<c:otherwise>
+					<a data-toggle="tooltip" data-placement="top" title="방장" class="btn btn-default btn"> 
+                        <i class="fa fa-star"></i> 난 방장
+                     </a>  
+				</c:otherwise>
             </c:choose>
             
          </div>
