@@ -352,7 +352,7 @@ public class GroupController {
 		      return mav;
 		   }
 		   
-		   @RequestMapping("update_schedule.do")
+		   @RequestMapping(value="update_schedule.do", method=RequestMethod.POST)
 		      public ModelAndView UpdateSchedule(HttpServletRequest request,ScheduleVO schvo, String gLeaderId, String orgScheduleDate,HttpSession session){
 		         ModelAndView mav = new ModelAndView();
 		         if(session!=null){
