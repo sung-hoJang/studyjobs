@@ -2,6 +2,8 @@
    
    
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,21 +42,49 @@ import org.springframework.web.servlet.ModelAndView;
       
       public Map<String, Object> getGroupHomeInfo(String gLeaderId,
             HttpSession session) {
-         Map<String, Object> map = new HashMap<String, Object>();
-         MemberVO mvo = (MemberVO) session.getAttribute("mvo");
-         // 그룹 정보 갖고오기
-         GroupVO vo = groupService.findGroupByLeaderId(gLeaderId);
-         // 내가 가입한 그룹 리스트 받아오기
-         List<GroupVO> list = groupService.getAllMyGroup(mvo.getId());
-         if (gLeaderId.equals(mvo.getId())){
-            map.put("checkLeader", "OK");
-         }
-         map.put("gLeaderId", gLeaderId);
-         map.put("groupList", list);
-         map.put("gvo", vo);
-         List<ScheduleVO> scheduleList = scheduleService.getGroupScheduleListBygLeaderId(gLeaderId);
-         map.put("scheduleList", scheduleList);
-         return map;
+    	  Map<String, Object> map = new HashMap<String, Object>();
+	      MemberVO mvo = (MemberVO) session.getAttribute("mvo");
+	      // 그룹 정보 갖고오기
+	      GroupVO vo = groupService.findGroupById(gLeaderId);
+
+	      // 내가 가입한 그룹 리스트 받아오기
+	      List<GroupVO> list = groupService.getAllMyGroup(mvo.getId());  
+
+	      if (gLeaderId.equals(mvo.getId()))
+	         map.put("checkLeader", "OK");
+
+	      map.put("gLeaderId", gLeaderId);
+	      map.put("groupList", list);
+	      map.put("gvo", vo);
+	      
+	      /*
+	       * 스케줄 리스트 받아오기
+	       * 
+	       */
+	      List<ScheduleVO> scheduleList = scheduleService.getGroupScheduleListBygLeaderId(gLeaderId);
+	      List<ScheduleVO> responseScheduleList = new ArrayList<ScheduleVO>();
+	      List<ScheduleVO> tempList = new ArrayList<ScheduleVO>();
+	      SimpleDateFormat trans = new SimpleDateFormat("yyyy/MM/dd hh:mm");
+	      java.util.Date today = new java.util.Date();     //오늘 날짜 
+	      String today1 = trans.format(today); //오늘 날짜를 스트링으로 변환 
+	      for ( ScheduleVO svo : scheduleList ){
+	         if ( svo.getDeadline() < 0 ){
+	            tempList.add(svo);
+	         }
+	         else if ( svo.getScheduleDate().substring(0, 7).equals(today1.substring(0, 7)) ){
+	            responseScheduleList.add(svo);
+	         }
+	      }
+	         
+	      for( ScheduleVO svo : tempList ){
+	         responseScheduleList.add(svo);
+	      }
+	      map.put("scheduleList", responseScheduleList);
+	      /*
+	       * 스케줄리스트 받아오기 끝
+	       */
+	      
+	      return map;
       }
      
       
