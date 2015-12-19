@@ -6,9 +6,21 @@
          
 <div id="groupMember">
 <c:forEach var="mvo" items ="${requestScope.map.list }" varStatus="status">
-
+	
    <div class="col-xs-4 col-sm-3" style="width: 300px;">
-      <div class="shortcut">
+   
+   <c:choose>
+	<c:when test="${requestScope.map.checkLeader == 'OK' && mvo.id != requestScope.map.gLeaderId}">
+		<div class="shortcut" >
+	</c:when>
+	<c:otherwise>
+		<div class="shortcut" style="background-color: #E4F7BA;">
+			
+	</c:otherwise>
+	</c:choose>
+	
+	
+<!--       <div class="shortcut"> -->
       <c:choose>
          <c:when test="${mvo.gender=='남' }">
             <div style="background: #5AAEFF;"><i class="fa fa-mars"></i></div>
