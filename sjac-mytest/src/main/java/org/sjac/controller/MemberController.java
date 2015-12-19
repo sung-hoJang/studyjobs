@@ -430,8 +430,7 @@ public class MemberController {
 		MemberVO vo = (MemberVO) session.getAttribute("mvo");
 		List<ScheduleVO> lastScheduleList = null;
 		if (scheduleSelect.equals("지난 스케줄")) {
-			lastScheduleList = scheduleService.findMyLastScheduleById(vo
-					.getId());
+			lastScheduleList = scheduleService.findMyLastScheduleById(vo.getId());
 		} else {
 			lastScheduleList = scheduleService.findMyScheduleById(vo.getId());
 		}
@@ -763,14 +762,15 @@ public class MemberController {
        map.put("reason", reason1);
        map.put("detailreason", detailreason1);
        memberService.insertReason(map);
-       
+       System.out.println("컨트롤러: 탈퇴이유");
        GroupVO gvo = groupService.findGroupByLeaderId(id);
-       
+       System.out.println("gvo:" + gvo);
        if (gvo != null) {// 그룹장이라면
           transactionService.deleteGroupTransaction(id);
           transactionService.deleteMemberTransaction(id);
        } else {// 일반회원이라면
           transactionService.deleteMemberTransaction(id);
+          System.out.println("일반회원탈퇴 : 컨트롤러");
        }
        session.invalidate();
        
