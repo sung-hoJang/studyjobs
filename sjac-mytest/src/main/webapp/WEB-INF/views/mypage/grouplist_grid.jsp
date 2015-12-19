@@ -168,7 +168,7 @@ $(document).ready(function(){
 <div class="list-results">
                                 <div class="row" id="grouplist">
                                     <c:forEach items="${requestScope.map.myGroupListGrid}" var="myGroupListGrid">
-                                    <div class="col-md-4" style="cursor:pointer" onclick="popup('${groupList.memberVO.id}')">
+                                    <div class="col-md-4" style="cursor:pointer" onclick="popup('${myGroupListGrid.memberVO.id}')">
                                       <div class="item-ads-grid">
                                       
                                             <div class="item-img-grid">
