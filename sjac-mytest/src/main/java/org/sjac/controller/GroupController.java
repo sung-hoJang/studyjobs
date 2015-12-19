@@ -91,9 +91,11 @@ public class GroupController {
 	   return mav;
    }
    
-   @RequestMapping(value="submit_schedule.do",method=RequestMethod.POST)
+   @RequestMapping("submit_schedule.do")
    public ModelAndView SubmitSchedule(HttpServletRequest request,ScheduleVO schvo, String gLeaderId, HttpSession session){
 	   ModelAndView mav = new ModelAndView();
+	   System.out.println("이거왜안나오니");
+	   	System.out.println(schvo);
 	      MemberVO mvo = (MemberVO)session.getAttribute("mvo");
 	      schvo.setId(mvo.getId());
 	      schvo.setgLeaderId(gLeaderId);
@@ -254,7 +256,6 @@ public class GroupController {
 	      /*
 	       * 스케줄리스트 받아오기 끝
 	       */
-	      
 	      return map;
    }
    
@@ -351,7 +352,7 @@ public class GroupController {
 		      return mav;
 		   }
 		   
-		   @RequestMapping(value="update_schedule.do",method=RequestMethod.POST)
+		   @RequestMapping("update_schedule.do")
 		      public ModelAndView UpdateSchedule(HttpServletRequest request,ScheduleVO schvo, String gLeaderId, String orgScheduleDate,HttpSession session){
 		         ModelAndView mav = new ModelAndView();
 		         if(session!=null){
@@ -362,6 +363,7 @@ public class GroupController {
 		         }
 		         schvo.setgLeaderId(gLeaderId);
 		         schvo.setScheduleDate(schvo.getScheduleDate() + " " +  request.getParameter("scheduleTime"));
+		         System.out.println(schvo);
 		         scheduleService.updateSchedule(schvo,orgScheduleDate);
 		         mav.addObject("map", getGroupHomeInfo(gLeaderId, session));
 		         mav.setViewName("group_schedule");
@@ -380,17 +382,32 @@ public class GroupController {
 				return mav;
            }	   
 			
-			@RequestMapping("findGroupPageScheduleByYearAndMonth.do")
-	         @ResponseBody
-	         public List<ScheduleVO> findGroupPageScheduleByYearAndMonth(String gLeaderId, String selectedYearMonth){
-	            Map<String, Object> map = new HashMap<String, Object>();
-	            map.put("gLeaderId", gLeaderId);
-	            map.put("selectedYearMonth", selectedYearMonth);
-	            List<ScheduleVO> scheduleList = scheduleService.findGroupPageScheduleByYearAndMonth(map);
-	            return scheduleList;
-	         }
+	@RequestMapping("findGroupPageScheduleByYearAndMonth.do")
+	@ResponseBody
+	public List<ScheduleVO> findGroupPageScheduleByYearAndMonth(String gLeaderId, String selectedYearMonth){
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("gLeaderId", gLeaderId);
+		map.put("selectedYearMonth", selectedYearMonth);
+		List<ScheduleVO> scheduleList = scheduleService.findGroupPageScheduleByYearAndMonth(map);
+		return scheduleList;
+	}
 		   
-		   
+	@RequestMapping("checkDuplicatedDate.do")
+	@ResponseBody
+	public String existDate(String gLeaderId, String scheduleDate){
+		System.out.println("---------");
+		System.out.println("드루와");
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("gLeaderId", gLeaderId);
+		map.put("scheduleDate", scheduleDate);
+		System.out.println("scheduleDate= " + scheduleDate);
+		int flag = scheduleService.existDate(map);
+		System.out.println("flag = " + flag);
+		if( flag > 0 )
+			return "exist";
+		else
+			return "nothing";
+	}
 		   
 }
 

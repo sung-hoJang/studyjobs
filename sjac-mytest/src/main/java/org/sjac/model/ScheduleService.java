@@ -1,5 +1,6 @@
 package org.sjac.model;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -61,5 +62,7 @@ public interface ScheduleService {
 	 * @return
 	 */
 	public List<ScheduleVO> findGroupPageScheduleByYearAndMonth(Map<String, Object> map);
+
+	public int existDate(HashMap<String, String> map);
 	
 }

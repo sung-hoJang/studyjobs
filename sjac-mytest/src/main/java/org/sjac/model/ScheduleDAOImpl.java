@@ -36,6 +36,7 @@ public class ScheduleDAOImpl implements ScheduleDAO{
 	
 	  @Override
 	   public void submitSchedule(ScheduleVO schvo) {
+		  
 	      sqlSessionTemplate.insert("schedule.submitSchedule", schvo);
     }
 	  
@@ -86,5 +87,8 @@ public class ScheduleDAOImpl implements ScheduleDAO{
 		return sqlSessionTemplate.selectList("schedule.findGroupPageScheduleByYearAndMonth", map);
 	}
 	
-	
+	@Override
+	public int existDate(HashMap<String, String> map) {
+		return sqlSessionTemplate.selectOne("schedule.existDate", map);
+	}
 }

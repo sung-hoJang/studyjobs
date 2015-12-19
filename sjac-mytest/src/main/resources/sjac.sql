@@ -1,4 +1,5 @@
-
+select * from cu_schedule where to_char(schedule_date, 'yyyy-mm-dd') like '%2015-12-23%' and gleader_id='yoho375' or to_char(schedule_date, 'yyyy-mm-dd')='2015-12-23 01:00' 
+select count(*) from cu_schedule where gleader_id='yoho375'
 -- 만들기 1
 -- CU_MEMBER 테이블( 회원 )
 create table cu_member(

@@ -48,4 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
      order by schedule_date asc 
   </select>
   
+  <select id="existDate" resultType="int">
+	select count(*) from cu_schedule where to_char(schedule_date, 'yyyy-mm-dd')=#{scheduleDate}
+  </select>
 </mapper>

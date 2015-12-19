@@ -1,5 +1,6 @@
 package org.sjac.model;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -52,4 +53,8 @@ public class ScheduleServiceImpl implements ScheduleService{
 		return scheduleDAO.findGroupPageScheduleByYearAndMonth(map);
 	}
 
+	@Override
+	public int existDate(HashMap<String, String> map) {
+		return scheduleDAO.existDate(map);
+	}
 }

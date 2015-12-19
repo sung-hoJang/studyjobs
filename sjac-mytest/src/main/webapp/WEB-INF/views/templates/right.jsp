@@ -253,6 +253,14 @@
        
     }); 
    
+   $("#scheduleBody").on("click", "tr", function(){
+	   var date = $(this).children().eq(0).text();
+       if(confirm(date+"해당날짜의 스케쥴을 수정하시겠습니까?")){
+       var url = "find_scheduleByScheduleDate.do?scheduleDate="+date+"&gLeaderId=${requestScope.map.gLeaderId}";    
+       $(location).attr('href',url);
+       }
+   });
+   
    
  });
 
