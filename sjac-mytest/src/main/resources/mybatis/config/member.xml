@@ -68,7 +68,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  	</insert>
  	
 	<insert id="addLastSchedule">
-		insert into cu_last_schedule values(cu_last_schedule_seq.nextval, #{id}, #{gLeaderId}, to_date(#{scheduleDate}, 'yyyy-mm-dd hh24:mi'), #{scheduleInfo})
+		insert into cu_last_schedule values(cu_last_schedule_seq.nextval, #{gLeaderId}, #{gLeaderId}, to_date(#{scheduleDate}, 'yyyy-mm-dd hh24:mi'), #{scheduleInfo})
 	</insert> 	
 	
 	<delete id="deleteLastSchedule">
@@ -88,12 +88,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select count(*) from cu_group_member where id=#{id}
 	</select>
 	
-	  <select id="findMyScheduleByGroupLeaderId" resultMap="scheduleRM" resultType="schvo"> <!--그룹장 아이디로 스케쥴 검색 (능) -->
+	  <select id="findMyScheduleByGroupLeaderId" resultMap="scheduleRM"> <!--그룹장 아이디로 스케쥴 검색 (능) -->
         select cs.no as no, cs.gleader_id as gleader_id, to_char(cs.schedule_date, 'yyyy-mm-dd hh24:mi') as schedule_date, 
         cs.schedule_info as schedule_info, g.gname as gname, s.category_image as category_image,
         cs.schedule_date-sysdate as deadline
         from cu_schedule cs, cu_group g, cu_subject_category s  
-        where cs.gleader_id = g.gleader_id and g.gsubject=s.subject and gleader_id=#{value} 
+        where cs.gleader_id = g.gleader_id and g.gsubject=s.subject and g.gleader_id=#{value} 
         order by cs.schedule_date asc 
     </select>
     
@@ -103,7 +103,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         cs.schedule_info as schedule_info, g.gname as gname, s.category_image as category_image,
         cs.schedule_date-sysdate as deadline
         from cu_last_schedule cs, cu_group g, cu_subject_category s  
-        where cs.gleader_id = g.gleader_id and g.gsubject=s.subject and cs.gleader_id=#{value} 
+        where cs.gleader_id = g.gleader_id and g.gsubject=s.subject and g.gleader_id=#{value} 
         order by cs.schedule_date asc 
     </select>
     

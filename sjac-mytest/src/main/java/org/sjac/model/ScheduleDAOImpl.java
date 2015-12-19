@@ -91,4 +91,9 @@ public class ScheduleDAOImpl implements ScheduleDAO{
 	public int existDate(HashMap<String, String> map) {
 		return sqlSessionTemplate.selectOne("schedule.existDate", map);
 	}
+	
+	@Override
+	public List<ScheduleVO> findMyScheduleByGroupLeaderId(String id) {
+		return sqlSessionTemplate.selectList("member.findMyScheduleByGroupLeaderId", id);
+	}
 }

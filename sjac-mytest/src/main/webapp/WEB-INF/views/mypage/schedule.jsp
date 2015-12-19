@@ -14,7 +14,7 @@ $(document).ready(function(){
 					$("#tableSet").empty();
 					comp += "<tr>";
 					comp += "<td><img alt='' class='thumb-img img-responsive' src='"+data.groupVO.subjectVO.categoryImg+"'></td>"
-					if( data.deadline < 3 && data.deadline >= 0 ){
+					if( data.deadline < 4 && data.deadline >= 0 ){
 						comp += "<td bgcolor='#FFCBCB'>";
 						comp += "<i class='fa fa-clock-o'></i><strong>"+data.scheduleDate+"</strong>";
 						comp += "</td>";

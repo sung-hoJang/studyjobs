@@ -97,5 +97,8 @@ public interface ScheduleDAO {
 
 
 	public int existDate(HashMap<String, String> map);
+
+
+	public List<ScheduleVO> findMyScheduleByGroupLeaderId(String id);
 	
 }

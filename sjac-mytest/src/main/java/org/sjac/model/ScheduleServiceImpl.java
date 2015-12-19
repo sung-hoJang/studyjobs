@@ -1,5 +1,8 @@
 package org.sjac.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,14 +16,55 @@ public class ScheduleServiceImpl implements ScheduleService{
 	@Resource
 	private ScheduleDAO scheduleDAO;
 	
+	@Resource
+	private GroupDAO groupDAO;
+	
 	@Override
 	public List<ScheduleVO> findMyScheduleById(String id) {
-		return scheduleDAO.findMyScheduleById(id);
+		List<GroupVO> groupList = groupDAO.getAllMyGroup(id);
+		List<ScheduleVO> list = new ArrayList<ScheduleVO>();
+		List<ScheduleVO> tempList = new ArrayList<ScheduleVO>();
+
+		for (GroupVO vo : groupList) {
+			tempList = scheduleDAO.findMyScheduleById(vo.getMemberVO().getId());
+			for (ScheduleVO svo : tempList) {
+				list.add(svo);
+			}
+		}
+		
+		Collections.sort(list, new Comparator<ScheduleVO>() {
+			public int compare(ScheduleVO s1, ScheduleVO s2) {
+				return s1.getScheduleDate().compareTo(s2.getScheduleDate());
+			}
+		});
+		
+		System.out.println("리스트 씨쓰아웃 : " + list);
+		
+		
+		return list;
 	}
 
 	@Override
 	public List<ScheduleVO> findMyLastScheduleById(String id) {
-		return scheduleDAO.findMyLastScheduleById(id);
+		List<GroupVO> groupList = groupDAO.getAllMyGroup(id);
+		List<ScheduleVO> list = new ArrayList<ScheduleVO>();
+		List<ScheduleVO> tempList = new ArrayList<ScheduleVO>();
+
+		for (GroupVO vo : groupList) {
+			tempList = scheduleDAO.findMyLastScheduleById(vo.getMemberVO().getId());
+			for (ScheduleVO svo : tempList) {
+				list.add(svo);
+			}
+		}
+
+		Collections.sort(list, new Comparator<ScheduleVO>() {
+			public int compare(ScheduleVO s1, ScheduleVO s2) {
+				return s1.getScheduleDate().compareTo(s2.getScheduleDate());
+			}
+		});
+		
+		System.out.println("리스트 씨쓰아웃 : " + list);
+		return list;
 	}
 	   @Override
 	   public void submitSchedule(ScheduleVO schvo) {

@@ -12,7 +12,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="submitSchedule" parameterType="schvo"> 
   insert into cu_schedule(
      no,id,gleader_id,schedule_date,schedule_info
-  )  values(cu_schedule_seq.nextval,#{id},#{gLeaderId},to_date(#{scheduleDate}, 'yyyy-mm-dd hh24:mi'),#{scheduleInfo})
+  )  values(cu_schedule_seq.nextval,#{gLeaderId},#{gLeaderId},to_date(#{scheduleDate}, 'yyyy-mm-dd hh24:mi'),#{scheduleInfo})
   </insert>
   
   <select id="getGroupScheduleListBygLeaderId"  resultMap="scheduleRM">
