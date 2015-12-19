@@ -79,9 +79,9 @@ $(document).ready(function(){
                                     <div class="before-table">
                                         <div class="row">
                                            &nbsp;
+                                      <input type="button"  class="myButton" id="showAll" value="전체"> 
                                       <input type="button"  class="myButton" id="showGeneral" value="일반글"> 
                                       <input type="button"  class="myButton" id="showUpload" value="업로드"> 
-                                      <input type="button"  class="myButton" id="showAll" value="전체"> 
                                         </div>
                                     </div>
    <table class="table">
