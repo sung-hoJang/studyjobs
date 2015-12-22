@@ -88,8 +88,11 @@ public class TransactionServiceImpl implements TransactionService {
 		Map<String, String> map = new HashMap<String, String> ();
 		map.put("id", gjvo.getMemberVO().getId());
 		map.put("gLeaderId", gjvo.getGroupVO().getMemberVO().getId());
-		groupJoinDAO.joinGroup(gjvo);
-		cartDAO.deleteMyCart(map);
+		groupJoinDAO.joinGroup(gjvo);		//원하는 그룹에 가입 요청
+		
+		//가입요청을 하면 찜하기가 삭제되어야 하기 때문에 
+		//cart 테이블에서 삭제처리
+		cartDAO.deleteMyCart(map);			
 	}
 
 	@Override
