@@ -10,7 +10,7 @@
    <div class="col-xs-4 col-sm-3" style="width: 300px;">
    
    <c:choose>
-	<c:when test="${requestScope.map.checkLeader == 'OK' && mvo.id != requestScope.map.gLeaderId}">
+	<c:when test="${mvo.id != requestScope.map.gLeaderId}">
 		<div class="shortcut" >
 	</c:when>
 	<c:otherwise>
@@ -60,11 +60,11 @@
                         <i class="fa fa-trash-o"></i> 얘 강퇴
                      </a>   
                </c:when>
-				<c:otherwise>
-					<a data-toggle="tooltip" data-placement="top" title="방장" class="btn btn-default btn"> 
+               <c:when test="${requestScope.map.checkLeader == 'OK' }">
+               	<a data-toggle="tooltip" data-placement="top" title="방장" class="btn btn-default btn"> 
                         <i class="fa fa-star"></i> 난 방장
-                     </a>  
-				</c:otherwise>
+                     </a>
+               </c:when>
             </c:choose>
             
          </div>
