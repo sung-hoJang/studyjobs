@@ -25,7 +25,6 @@
              }
              
              $(".new-ads").html(comp);
-             
           }
        });//ajax
        
