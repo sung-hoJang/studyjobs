@@ -10,7 +10,7 @@
    <div class="col-xs-4 col-sm-3" style="width: 300px;">
    
    <c:choose>
-	<c:when test="${requestScope.map.checkLeader == 'OK' && mvo.id != requestScope.map.gLeaderId}">
+	<c:when test="${mvo.id != requestScope.map.gLeaderId}">
 		<div class="shortcut" >
 	</c:when>
 	<c:otherwise>
@@ -55,7 +55,7 @@
          
          <div class="item-meta">
             <c:choose>
-               <c:when test="${requestScope.map.checkLeader == 'OK' && mvo.id != requestScope.map.gLeaderId}">
+               <c:when test="${ mvo.id != requestScope.map.gLeaderId}">
                   <a data-toggle="tooltip" id="getAwayGroupMember${status.count }" data-placement="top" title="강퇴" class="btn btn-success btn"> 
                         <i class="fa fa-trash-o"></i> 얘 강퇴
                      </a>   
