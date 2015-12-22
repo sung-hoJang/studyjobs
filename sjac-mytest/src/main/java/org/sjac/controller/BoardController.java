@@ -46,7 +46,7 @@ public class BoardController {
 	@RequestMapping("auth_board_deleteBoard.do")
 	public ModelAndView deleteBoard(String no) {
 		boardService.deleteBoard(no);
-		return new ModelAndView("board_list", "lvo",
+		return new ModelAndView("board_list", "map",
 				boardService.getBoardList("1"));
 	}
 
