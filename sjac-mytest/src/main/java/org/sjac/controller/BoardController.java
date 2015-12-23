@@ -39,7 +39,7 @@ public class BoardController {
 		}
 		boardService.write(bvo);
 		return new ModelAndView("redirect:auth_board_showContentNoHit.do?no="
-				+ bvo.getNo());
+				+ bvo.getNo()); //auth_board_showContentNoHit으로 넘겨 hit (조회수)를 올리지 않는다.
 	}
 
 	// 글삭제
