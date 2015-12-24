@@ -42,10 +42,26 @@ public class GroupBoardDAOImpl implements GroupBoardDAO{
 
    @Override
    public void updateChildBeforeDelete(Map<String, Object> gbmap) {
+	   //System.out.println("^^" +  gbmap);
 	   GroupBoardVO gbvo = sqlSessionTemplate.selectOne("groupBoard.getGroupBoard", gbmap);
 	      if(gbvo != null){
-	         gbmap.put("gbvo", gbvo);
-	         sqlSessionTemplate.update("groupBoard.updateChild", gbmap);
+	         gbmap.put("ref", gbvo.getRef());
+	         gbmap.put("restep", gbvo.getRestep());
+	         gbmap.put("relevel", gbvo.getRelevel());
+	         if(gbvo.getRelevel()==0){
+	        	 System.out.println("$1");
+	 			sqlSessionTemplate.update("groupBoard.updateChild1", gbmap);
+	         } else {
+	 			List<Object> restepList = sqlSessionTemplate.selectList("groupBoard.findNextSibling", gbmap);
+	 			if(restepList.isEmpty()){
+		        	 System.out.println("$2");
+					sqlSessionTemplate.update("groupBoard.updateChild2", gbmap);
+				}else{
+		        	 System.out.println("$3");
+					gbmap.put("siblingRestep", restepList.get(0));
+					sqlSessionTemplate.update("groupBoard.updateChild3", gbmap);
+				}
+	         }
 	      }    
    }
 

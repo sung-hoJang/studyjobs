@@ -31,6 +31,7 @@ public class BoardDAOImpl implements BoardDAO {
 
 	@Override
 	public BoardVO showContent(int no) {
+		BoardVO bvo = (BoardVO) sqlSessionTemplate.selectOne("board.showContent", no);
 		return (BoardVO) sqlSessionTemplate.selectOne("board.showContent", no);
 	}
 
@@ -76,7 +77,21 @@ public class BoardDAOImpl implements BoardDAO {
 	@Override
 	public void updateChildBeforeDelete(String no) {
 		BoardVO bvo = sqlSessionTemplate.selectOne("board.getBoard", no);
-		sqlSessionTemplate.update("board.updateChild", bvo);
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("ref", bvo.getRef());
+		map.put("restep", bvo.getRestep());
+		map.put("relevel", bvo.getRelevel()); 
+		if(bvo.getRelevel()==0){
+			sqlSessionTemplate.update("board.updateChild1", map);
+		} else {
+			List<Object> restepList = sqlSessionTemplate.selectList("board.findNextSibling", map);
+			if(restepList.isEmpty()){
+				sqlSessionTemplate.update("board.updateChild2", map);
+			}else{
+				map.put("siblingRestep", restepList.get(0));
+				sqlSessionTemplate.update("board.updateChild3", map);
+			}
+		}
 	}
 	
 	   @Override

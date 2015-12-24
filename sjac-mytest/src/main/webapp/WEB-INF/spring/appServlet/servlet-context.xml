@@ -64,7 +64,7 @@
 
 
           <!-- Exception Resolver -->
-<bean id="exceptionMapping"
+<!--  <bean id="exceptionMapping"
   class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
      <property name="exceptionMappings">
         <props>
@@ -75,7 +75,7 @@
      </property>
      <property name="exceptionAttribute" value="exceptionMsg" />
      <property name="defaultErrorView" value="/error" />
-</bean> 
+</bean> -->
 
 </beans>
 

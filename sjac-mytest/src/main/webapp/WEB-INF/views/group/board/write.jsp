@@ -49,7 +49,7 @@
         <option value="일반글">일반글</option>
         <option value="업로드">업로드</option>
    </select>
-      <input type="text" name="gbTitle" id="title" class="form-control" placeholder = "Title"></td>
+      <input type="text" name="gbTitle" id="title" class="form-control" placeholder = "Title" maxlength="15"></td>
     </tr>
     <tr>
       <td colspan=2><textarea cols="32" rows="10" name="gbContent" id="content" class="form-control" placeholder = "Content"
