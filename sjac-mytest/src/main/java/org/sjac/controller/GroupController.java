@@ -75,7 +75,7 @@ public class GroupController {
       ModelAndView mav = new ModelAndView();
       Map<String, Object> map = new HashMap<String, Object>();
       map = getGroupHomeInfo(gLeaderId, session);
-      List<GroupBoardVO> list = groupBoardService.getGroupBoardTest(gLeaderId);
+      List<GroupBoardVO> list = groupBoardService.getGroupBoardTest(gLeaderId); // 그룹페이지 메인화면에 그룹보드리스트를 받아옴
       map.put("list", list);
       mav.setViewName("group");
       mav.addObject("map", map);
