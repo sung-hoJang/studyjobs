@@ -151,20 +151,13 @@ $(document).ready(function(){
                                 <div class="row" id ="grouplist" >
                                   <c:forEach items="${requestScope.map.cartList}" var="cartList">
                                     <div class="col-sm-12" style="cursor:pointer" onclick="popup('${cartList.memberVO.id}')">
-                                    
-                                    
                                         <div class="item-ads1">
-
                                             <div class="row">
-         
-                              
                                     <div class="col-sm-2 col-xs-3">
-                                              
                                                     <div class="item-img">
                                                        <img alt="" src="${cartList.subjectVO.categoryImg}">
                                                     </div>
                                                 </div>
-                                                
                                                 <!-- 그룹 정보 -->
                                                 <div class="col-sm-8 col-xs-6">
                                                     <div class="item-title">

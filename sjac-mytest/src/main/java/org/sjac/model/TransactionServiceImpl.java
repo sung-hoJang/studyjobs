@@ -41,38 +41,34 @@ public class TransactionServiceImpl implements TransactionService {
 	@Transactional
 	@Override
 	public List<ScheduleVO> ScheduleTransaction(String id) throws Exception {
-//		List<ScheduleVO> scheduleList = scheduleDAO.findMyScheduleById(id);
-		List<GroupVO> groupList = groupDAO.getAllMyGroup(id);
+		List<GroupVO> groupList = groupDAO.getAllMyGroup(id); // 내가 가입한 그룹 리스트 받아오기
 		List<ScheduleVO> list= new ArrayList<ScheduleVO>();
 		List<ScheduleVO> tempList = new ArrayList<ScheduleVO>();
 		
-		for( GroupVO vo : groupList ){
-			tempList = scheduleDAO.findMyScheduleByGroupLeaderId(vo.getMemberVO().getId());
-			for( ScheduleVO svo : tempList ){
-				list.add(svo);
+		for( GroupVO vo : groupList ){ // 내가 가입한 그룹 리스트 중에서
+			tempList = scheduleDAO.findMyScheduleByGroupLeaderId(vo.getMemberVO().getId()); // 그룹장 아이디로 그 그룹의 스케줄리스트를 받아옴
+			for( ScheduleVO svo : tempList ){ // 받아온 스케줄을
+				list.add(svo); // 리스트에 추가
 			}
 		}
+		// list에는 회원이 가입한 그룹의 모든 스케줄이 들어감
 		
-		// list에는 회원이 가입한 그룹의 모든 쉐쥴이 들어감
-		
-		
-		for( ScheduleVO vo : list){
+		for( ScheduleVO vo : list){  // 자신이 가입한 그룹의 모든 스케줄 리스트 중에서
 			vo.setId(vo.getgLeaderId());
-			if( vo.getDeadline() < 0 ){
-				scheduleDAO.addLastSchedule(vo);
-				scheduleDAO.deleteLastSchedule(vo);
+			if( vo.getDeadline() < 0 ){ // 스케줄 날짜가 지난 날짜가 되었다면
+				scheduleDAO.addLastSchedule(vo); // 지난 스케줄 테이블에 스케줄 정보를 추가하고
+				scheduleDAO.deleteLastSchedule(vo); // 스케줄 테이블에서 지난 스케줄 정보를 삭제한다
 			}
 		}
-//		scheduleList = scheduleDAO.findMyScheduleById(id);
 		List<ScheduleVO> scheduleList = new ArrayList<ScheduleVO>();
 		
-		for( GroupVO vo : groupList ){
-			tempList = scheduleDAO.findMyScheduleByGroupLeaderId(vo.getMemberVO().getId());
-			for( ScheduleVO svo : tempList ){
-				scheduleList.add(svo);
+		for( GroupVO vo : groupList ){ // 내가 가입한 그룹 리스트 중에서 
+			tempList = scheduleDAO.findMyScheduleByGroupLeaderId(vo.getMemberVO().getId()); // 그룹장 아이디로 그 그룹의 스케줄리스트를 받아옴
+			for( ScheduleVO svo : tempList ){ // 받아온 스케줄을
+				scheduleList.add(svo); // 리스트에 추가
 			}
 		}
-		
+		/* 스케줄리스트를 날짜 순으로 정렬하는 부분 */
 		Collections.sort(scheduleList, new Comparator<ScheduleVO>() {
 			public int compare(ScheduleVO s1, ScheduleVO s2) {
 				return s1.getScheduleDate().compareTo(s2.getScheduleDate());

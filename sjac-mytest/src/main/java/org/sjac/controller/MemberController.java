@@ -65,7 +65,7 @@ public class MemberController {
 		return "redirect:home.do";
 	}
 
-	
+	// 내 정보를 보여주는 view 페이지(mypage_info.jsp)로 이동
 	@RequestMapping("auth_mypage_info.do")
 	public String myPage(HttpServletRequest request, MemberVO vo) {
 		HttpSession session = request.getSession(false);
@@ -76,8 +76,7 @@ public class MemberController {
 	@RequestMapping("auth_mypage_update.do")
 	public ModelAndView myInfoUpdate(MemberVO vo) {
 		ModelAndView mav = new ModelAndView();
-		List<StudyLocationVO> locationList = memberService
-				.getAllStudyLocation();
+		List<StudyLocationVO> locationList = memberService.getAllStudyLocation();// 지역 테이블에서 모든 지역 리스트를 받아오는 메서드
 		mav.setViewName("mypage_update");
 		mav.addObject("locationList", locationList);
 		return mav;
@@ -88,7 +87,7 @@ public class MemberController {
 	public ModelAndView myInfoUpdate1(HttpServletRequest request, MemberVO vo) {
 		ModelAndView mav = new ModelAndView();
 		HttpSession session = request.getSession(false);
-		memberService.updateMyInfo(vo);
+		memberService.updateMyInfo(vo); // 내 정보를 수정하는 메서드
 		mav.setViewName("mypage_info");
 		session.setAttribute("mvo", vo);
 		return mav;
@@ -100,8 +99,8 @@ public class MemberController {
 		ModelAndView mav = new ModelAndView();
 		HttpSession session = request.getSession(false);
 		MemberVO vo = (MemberVO) session.getAttribute("mvo");
-		List<GroupVO> myGroupList = groupService.getAllMyGroup(vo.getId());
-		int MyGroupCount = groupService.MyGroupCount(vo.getId());
+		List<GroupVO> myGroupList = groupService.getAllMyGroup(vo.getId());// 회원아이디로 자신이 가입한 그룹 리스트 받아오기
+		int MyGroupCount = groupService.MyGroupCount(vo.getId());// 회원아이디로 자신이 가입한 그룹 수 받아오기
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("myGroupList", myGroupList);
 		map.put("MyGroupCount", MyGroupCount);
@@ -115,8 +114,8 @@ public class MemberController {
 		ModelAndView mav = new ModelAndView();
 		HttpSession session = request.getSession(false);
 		MemberVO vo = (MemberVO) session.getAttribute("mvo");
-		List<GroupVO> myGroupListGrid = groupService.getAllMyGroup(vo.getId());
-		int MyGroupCount = groupService.MyGroupCount(vo.getId());
+		List<GroupVO> myGroupListGrid = groupService.getAllMyGroup(vo.getId());// 회원아이디로 자신이 가입한 그룹 리스트 받아오기
+		int MyGroupCount = groupService.MyGroupCount(vo.getId());// 회원아이디로 자신이 가입한 그룹 수 받아오기
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("myGroupListGrid", myGroupListGrid);
 		map.put("MyGroupCount", MyGroupCount);
@@ -131,9 +130,8 @@ public class MemberController {
 		ModelAndView mav = new ModelAndView();
 		HttpSession session = request.getSession(false);
 		MemberVO vo = (MemberVO) session.getAttribute("mvo");
-		List<GroupVO> joinList = groupJoinService.getAllJoinRequestGroup(vo
-				.getId());
-		int joinCount = groupJoinService.MyRequestGroupCount(vo.getId());
+		List<GroupVO> joinList = groupJoinService.getAllJoinRequestGroup(vo.getId());// 회원아이디로 가입요청한그룹리스트 받아오기
+		int joinCount = groupJoinService.MyRequestGroupCount(vo.getId());// 회원아이디로 가입요청한그룹 수 받아오기
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("joinList", joinList);
 		map.put("joinCount", joinCount);
@@ -147,9 +145,8 @@ public class MemberController {
 		ModelAndView mav = new ModelAndView();
 		HttpSession session = request.getSession(false);
 		MemberVO vo = (MemberVO) session.getAttribute("mvo");
-		List<GroupVO> joinList = groupJoinService.getAllJoinRequestGroup(vo
-				.getId());
-		int joinCount = groupJoinService.MyRequestGroupCount(vo.getId());
+		List<GroupVO> joinList = groupJoinService.getAllJoinRequestGroup(vo.getId());// 회원아이디로 가입요청한그룹리스트 받아오기
+		int joinCount = groupJoinService.MyRequestGroupCount(vo.getId());// 회원아이디로 가입요청한그룹 수 받아오기
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("joinList", joinList);
 		map.put("joinCount", joinCount);
@@ -165,7 +162,7 @@ public class MemberController {
 		ModelAndView mav = new ModelAndView();
 		HttpSession session = request.getSession(false);
 		MemberVO vo = (MemberVO) session.getAttribute("mvo");
-		List<ScheduleVO> scheduleList = transactionService.ScheduleTransaction(vo.getId());
+		List<ScheduleVO> scheduleList = transactionService.ScheduleTransaction(vo.getId()); // 회원의 아이디로 자신이 가입된 그룹의 모든 스케줄 받아오기
 		mav.setViewName("mypage_schedule");
 		mav.addObject("scheduleList", scheduleList);
 		return mav;
@@ -260,23 +257,21 @@ public class MemberController {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("id", vo.getId());
 		map.put("gLeaderId", gLeaderId);
-		boolean check = groupService.checkMyGroup(map);
-		if (check == true) {
-			mav.setViewName("redirect:group_member_home.do?gLeaderId="
-					+ gLeaderId);
+		boolean check = groupService.checkMyGroup(map); // 그룹원에 속해있는지를 확인하는 메서드 
+		if (check == true) { // true를 반환받았다면 
+			mav.setViewName("redirect:group_member_home.do?gLeaderId="+ gLeaderId);// 그룹 페이지로 바로 이동
 		} else {
-			GroupVO groupInfo = groupService.findGroupById(gLeaderId);
-			GroupJoinVO groupJoinVO = groupJoinService.getMyJoinRequest(map);
-			boolean flag = cartService.checkCart(gLeaderId, vo.getId());
+			GroupVO groupInfo = groupService.findGroupById(gLeaderId);// 그룹장의 아이디로 그룹을 찾는 메서드
+			GroupJoinVO groupJoinVO = groupJoinService.getMyJoinRequest(map); // 본인의 아이디와 그룹장 아이디로 가입요청한 그룹의 정보 받아오는 메서드
+			boolean flag = cartService.checkCart(gLeaderId, vo.getId()); //찜 목록에 들어있는지 없는지를 확인하는 메서드
 			Map<String, Object> map2 = new HashMap<String, Object>();
 			map2.put("groupInfo", groupInfo);
 			map2.put("groupJoinVO", groupJoinVO);
 			if (flag) // 카트에 들어있으면 찜하기 불가능 하기 때문에 fail
 				map2.put("flag", "fail");
 			else
-				// 카트에 안드가있으면 찜하기 가능하기 때문에 ok
+				// 카트에 안들어가있으면 찜하기 가능하기 때문에 ok
 				map2.put("flag", "ok");
-
 			mav.setViewName("nonMember");
 			mav.addObject("map", map2);
 		}
@@ -469,14 +464,15 @@ public class MemberController {
 
 		return mav;
 	}
-
+	
+	// 마이페이지 내 찜 목록 보기 (List형식)
 	@RequestMapping("auth_mypage_cart.do")
 	public ModelAndView cart(HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView();
 		HttpSession session = request.getSession(false);
 		MemberVO vo = (MemberVO) session.getAttribute("mvo");
-		List<GroupVO> cartList = cartService.getAllMyCart(vo.getId());
-		int cartCount = cartService.MyCartCount(vo.getId());
+		List<GroupVO> cartList = cartService.getAllMyCart(vo.getId()); // 내가 찜한 그룹의 리스트를 받아오는 메서드 
+		int cartCount = cartService.MyCartCount(vo.getId()); // 내가 찜한 그룹의 수를 받아오는 메서드
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("cartList", cartList);
 		map.put("cartCount", cartCount);
@@ -484,14 +480,15 @@ public class MemberController {
 		mav.addObject("map", map);
 		return mav;
 	}
-
+	
+	// 마이페이지 내 찜 목록 보기 (Grid형식)
 	@RequestMapping("auth_mypage_cart_grid.do")
 	public ModelAndView cartGrid(HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView();
 		HttpSession session = request.getSession(false);
 		MemberVO vo = (MemberVO) session.getAttribute("mvo");
-		List<GroupVO> cartList = cartService.getAllMyCart(vo.getId());
-		int cartCount = cartService.MyCartCount(vo.getId());
+		List<GroupVO> cartList = cartService.getAllMyCart(vo.getId()); // 내가 찜한 그룹의 리스트를 받아오는 메서드 
+		int cartCount = cartService.MyCartCount(vo.getId()); // 내가 찜한 그룹의 수를 받아오는 메서드
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("cartList", cartList);
 		map.put("cartCount", cartCount);
@@ -630,24 +627,21 @@ public class MemberController {
 		transactionService.deleteGroupTransaction(id);
 		return new ModelAndView("redirect:auth_admin_getAllGroupList.do");
 	}
-
+	
 	@RequestMapping("deleteCart.do")
 	public ModelAndView deleteCart(String gLeaderId, String id, String parentURL) {
 		ModelAndView mav = new ModelAndView();
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("id", id);
 		map.put("gLeaderId", gLeaderId);
-
-		cartService.deleteMyCart(map);
-
-		int cartCount = cartService.MyCartCount(id);
+		cartService.deleteMyCart(map); // 본인의 아이디와 그룹장 아이디로 내가 찜한 그룹을 삭제하는 메서드
+		int cartCount = cartService.MyCartCount(id); // 내가 찜한 그룹의 수를 세는 메서드
 		Map<String, Object> map2 = new HashMap<String, Object>();
 		map2.put("cartCount", cartCount);
-		List<GroupVO> cartList = cartService.getAllMyCart(id);
+		List<GroupVO> cartList = cartService.getAllMyCart(id); // 내가 찜한 그룹의 리스트를 받아오는 메서드
 		map2.put("cartList", cartList);
-
-		String urlParse[] = parentURL.split("/");
-
+		/* 페이지를 새로고침하는 소스 */
+		String urlParse[] = parentURL.split("/");  
 		for (String value : urlParse) {
 			if (value.contains(".")) {
 				parentURL = value;

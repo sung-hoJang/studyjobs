@@ -14,11 +14,15 @@
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<!-- 전역적인 설정을 담당 -->
 	<!-- model 계층 bean 설정, dbcp, MyBatis 관련 설정, AOP, Transaction 설정 -->
+	
+	<!-- Filter 설정 -->
 	<context:component-scan base-package="org.sjac">
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
+	  
 	   <!-- aop 설정 -->
    <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+	
 	<!-- dataSource -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName">
@@ -37,6 +41,7 @@
 			<value>30</value>
 		</property>
 	</bean>
+
 	<!-- MyBatis 연동 설정 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"></property>
@@ -46,6 +51,7 @@
 	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg ref="sqlSessionFactory"></constructor-arg>
 	</bean>
+
 <!--  Transaction 설정  -->
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource"/>

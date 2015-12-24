@@ -183,18 +183,15 @@ $(document).ready(function(){
                            <li class="item-cat"><i class="fa fa-bars"></i> 분류</li>
                            <li class="item-cat"> ${myGroupListGrid.subjectVO.subjectCategory} ,${myGroupListGrid.subjectVO.subject}</li>
                         </ul>
-
                         <ul>
                            <li class="item-location"><a href="category.html"><i
                                  class="fa fa-map-marker"></i> 지역</a></li>
                            <li class="item-location"><a href="category.html">${myGroupListGrid.gLocation }</a></li>
                         </ul>
-
                         <ul>
                            <li class="item-date"><i class="fa fa-user"></i> 인원</li>
                            <li class="item-date">${myGroupListGrid.curMember}/${myGroupListGrid.gCount }</li>
                         </ul>
-                        
                         <ul>
                      <li><i class="fa fa-clock-o"> 그룹 시작</i></li>
                      <li>${myGroupListGrid.gDate}</li>

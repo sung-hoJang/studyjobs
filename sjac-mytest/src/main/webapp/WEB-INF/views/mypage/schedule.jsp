@@ -62,9 +62,7 @@ $(document).ready(function(){
                                                 <c:choose>
                                                 	<c:when test="${scheduleList.deadline < 3}">
                                                 	  <td bgcolor="#FFCBCB">
-                                                        
                                                            <i class="fa fa-clock-o"></i><strong>${scheduleList.scheduleDate}</strong>
-                                                        
                                               		  </td>
                                                 	</c:when>
                                                 	<c:otherwise>

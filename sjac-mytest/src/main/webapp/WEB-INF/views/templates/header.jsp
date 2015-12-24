@@ -91,8 +91,7 @@
                        <c:choose>
                        	<c:when test="${sessionScope.mvo != null}">
                        		 <li class="new-ads">
-                       		 <!-- <a href="auth_member_create_group.do" class="btn btn-ads btn-block">그룹생성</a> -->  
-                       		 </li>	
+                             </li>  
                        		 <li><a href="member_find_group.do">그룹검색</a></li>
                        		 <li><a href="auth_board_list.do">자유게시판</a></li>
                        		 <c:choose>
@@ -111,7 +110,6 @@
                                 <ul class="dropdown-menu">
                                     <li><a href="auth_mypage_grouplist.do">내가 가입한 그룹</a></li>
                                     <li><a href="auth_mypage_join_grouplist.do">가입 요청한 그룹</a></li>
-                                   <%--  <li><a href="" onclick="myGroupPopup('${sessionScope.mvo.id}')">내가 만든 그룹</a></li>  --%>
 									<li><a href="auth_mypage_schedule.do">내 스케줄</a></li>
                                     <li><a href="auth_mypage_info.do">내 정보</a></li>
                                     <li><a href="auth_mypage_cart.do">내 찜 목록</a></li>
@@ -127,7 +125,8 @@
                             <li><a href="auth_board_list.do">자유게시판</a></li>
                           
                             <li class="dropdown">
-                               <a class="dropdown-toggle" href="#" data-toggle="dropdown" onclick="checkCookie()"><i class="fa fa-user"></i> 로그인<strong class="caret"></strong>&nbsp;</a>                           
+                               <a class="dropdown-toggle" href="#" data-toggle="dropdown" onclick="checkCookie()"><i class="fa fa-user"></i> 로그인
+                               <strong class="caret"></strong>&nbsp;</a>                           
                                   <div class="dropdown-menu dropdown-login" style="padding:15px;min-width:250px">
                                     <form action="login.do" method="post" id="LoginForm">                       
                                         <div class="form-group">

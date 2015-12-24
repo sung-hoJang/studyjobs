@@ -30,7 +30,7 @@ public class GroupDAOImpl implements GroupDAO{
 	
 	@Override
 	public List<GroupVO> getAllMyGroup(String id) {
-		return sqlSessionTemplate.selectList("group.getAllmyGroup", id);
+		return sqlSessionTemplate.selectList("group.getAllmyGroup", id); 
 	}
 	
 	@Override

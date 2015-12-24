@@ -69,8 +69,7 @@ create sequence cu_board_seq;
 drop sequence cu_board_seq;
 drop table cu_board;
 select * from cu_board;
-
-
+       
 insert into CU_BOARD(no,category,content,title,id,mydate,hits,ref,restep,relevel)
 values(cu_board_seq.nextval,'일반','대원오빠마마마마마마','영어정보','kjy',sysdate,8,3,0,0);
 
@@ -849,11 +848,11 @@ create table cu_leave_reason(
    detailreason clob not null
 )
 
-
+drop sequence hhh_seq;
 create sequence cu_leave_reason_seq;
 
 
-
+select * from user_sequences
 
 
 

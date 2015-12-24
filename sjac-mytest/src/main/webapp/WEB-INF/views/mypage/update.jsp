@@ -28,7 +28,8 @@
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label">ID</label>
                                             <div class="col-sm-9">
-                                                <input type="text" name="id" required="required" value="${sessionScope.mvo.id }" maxlength="100" class="form-control" readonly >                                  </div>
+                                                <input type="text" name="id" required="required" value="${sessionScope.mvo.id }" maxlength="100" class="form-control" readonly >                                 
+                                            </div>
                                         </div>
                                           <hr>
                                         <div class="form-group">
@@ -41,7 +42,8 @@
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label">Name</label>
                                             <div class="col-sm-9">
-                                                <input type="text" required="required"  name="name" value="${sessionScope.mvo.name}" class="form-control" >                                   </div>
+                                                <input type="text" required="required"  name="name" value="${sessionScope.mvo.name}" class="form-control" >                                  
+                                            </div>
                                         </div>
                                         <hr>
                                          <div class="form-group" id="scroll2">
@@ -59,7 +61,8 @@
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label">Tel</label>
                                             <div class="col-sm-9">
-                                                <input type="tel"  name="tel" value="${sessionScope.mvo.tel}" maxlength="11" class="form-control" >                                  </div>
+                                                <input type="tel"  name="tel" value="${sessionScope.mvo.tel}" maxlength="11" class="form-control" >                                 
+                                            </div>
                                         </div>
                                         <hr>
                                         <div class="form-group">
@@ -78,13 +81,14 @@
 							                     	</c:otherwise>
 							                     </c:choose>
 							                  </select>
-                                            <input type="text" id="gender" name="gender" value="${sessionScope.mvo.gender}" class="form-control" readonly>                                 </div>
+                                            <input type="text" id="gender" name="gender" value="${sessionScope.mvo.gender}" class="form-control" readonly>                                
+                                           </div>
                                         </div>
                                         <hr>
                                          <div class="form-group">
                                             <label  class="col-sm-3 control-label">Birthdate</label>
                                             <div class="col-sm-9">
-                                                <input type="date" name="birthdate" class="form-control"  value="${sessionScope.mvo.birthdate}" >                                 <span class="help-block"></span>
+                                                <input type="date" name="birthdate" class="form-control"  value="${sessionScope.mvo.birthdate}" > <span class="help-block"></span>
                                             </div>
                                         </div>  
                                         <hr>

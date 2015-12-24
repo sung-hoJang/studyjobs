@@ -16,7 +16,9 @@
    <property name="suffix" value=".jsp"></property>
    </bean>
    
+   <!-- Annotation 기반 컨트롤러를 위한 설정  -->
    <mvc:annotation-driven/>
+   <!-- IOC Annotation 명시된 빈(객체)을 생성  -->
    <context:component-scan base-package="org.sjac.controller"></context:component-scan>
    
 	   <!-- Tile Framework 연동 설정 -->
@@ -37,8 +39,6 @@
 <!--  Handler Interceptor 설정  -->
 	 <mvc:interceptors>
 		<mvc:interceptor>
-		<!-- 	<mvc:mapping path="/updateMember.do"/>
-			<mvc:mapping path="/updateView.do"/> -->
 			<mvc:mapping path="/auth_*.do"/>
 			<bean class="org.sjac.controller.LoginCheckInterceptor"></bean>
 		</mvc:interceptor>
@@ -49,24 +49,19 @@
     <!-- 파일 업로드 설정 -->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
        <property name="defaultEncoding" value="utf-8"></property>
-       <!-- -1은 제한 없음  5*1024*1024 -->
-       <property name="maxUploadSize" value="-1"></property>
+       <property name="maxUploadSize" value="-1"></property> <!-- -1은 제한 없음  5*1024*1024 -->
     </bean> 
-   <!-- upload path
-         개발시에는 workspace 경로를 주입시키고  
-         운영시에는 실제 서버 경로를 주입시킨다. 
-         운영 업로드 경로
-         C:\java-kosta\WAS\sjac-tomcat\webapps\sjac-project\upload -->
+   <!-- upload path  개발시에는 workspace 경로를 주입시키고 , 운영시에는 실제 서버 경로를 주입시킨다. 
+         운영 업로드 경로 ( C:\java-kosta\WAS\sjac-tomcat\webapps\sjac-project\upload)  -->
    <bean id="uploadPath" class="java.lang.String" >
-
        <constructor-arg value = "C:\\java-kosta\\WAS\\sjac-tomcat\\webapps\\sjac-project\\upload\\"/>
    </bean>
    <bean id="beanNameViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
    <property name="order" value="1"></property>
    </bean>
-   
    <!-- 파일다운로드를 위한 view를 설정 -->
    <bean name="downloadView" class="org.sjac.controller.DownloadView"></bean>
+
 
           <!-- Exception Resolver -->
 <bean id="exceptionMapping"

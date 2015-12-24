@@ -17,7 +17,7 @@ public interface TransactionService {
 	public abstract void TransactionAll(GroupVO gvo, GroupMemberVO gmvo) throws Exception;
 	
 	/**
-	 * 
+	 * 내가 가입한 그룹의 리스트를 받아온 후 그 그룹의 모든 스케줄을 출력
 	 * 일정이 지난 스케줄을 CU_SCHEDULE에서 삭제
 	 * 일정이 지난 스케줄을 CU_LAST_SCHEDULE에 추가
 	 * @param id

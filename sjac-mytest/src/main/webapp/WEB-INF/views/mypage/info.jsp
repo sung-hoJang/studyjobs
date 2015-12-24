@@ -28,7 +28,6 @@
                                             <div class="col-sm-9">
                                                 <input type="text" name="id" required="required" value="${sessionScope.mvo.id}"  class="form-control" readonly >                                  </div>
                                         </div>
-                                       
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label">Name</label>
                                             <div class="col-sm-9">
@@ -42,12 +41,14 @@
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label">Tel</label>
                                             <div class="col-sm-9">
-                                                <input type="tel" name="tel" value="${sessionScope.mvo.tel}" maxlength="100" class="form-control"  readonly>                                  </div>
+                                                <input type="tel" name="tel" value="${sessionScope.mvo.tel}" maxlength="100" class="form-control"  readonly>   
+                                            </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label">Gender</label>
                                             <div class="col-sm-9">
-                                                <input type="text" name="gender" value="${sessionScope.mvo.gender}" class="form-control"  readonly>                                 </div>
+                                                <input type="text" name="gender" value="${sessionScope.mvo.gender}" class="form-control"  readonly>  
+                                            </div>
                                         </div>
                                          <div class="form-group">
                                             <label  class="col-sm-3 control-label">Birthdate</label>
