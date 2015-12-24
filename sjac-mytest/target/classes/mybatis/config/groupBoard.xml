@@ -107,15 +107,35 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 </select>
 
    <select id="getGroupBoard" parameterType="map" resultMap="groupBoardListRM">
-      select ref, restep from ${gbtable} where gbno=#{no}
-   </select>
+      select ref, restep, relevel from ${gbtable} where gbno=#{no}
+   </select>    
    
-    <update id="updateChild" parameterType="map">
+   <update id="updateChild3" parameterType="map">
        update ${gbtable}
           set parent= 0
-          where ref=#{gbvo.ref}
-          AND restep = #{gbvo.restep}+1
+          where ref=#{ref}
+          AND relevel = #{relevel}+1 AND
+          <![CDATA[ #{restep} < restep and restep<#{siblingRestep}]]>
     </update>
+    
+     <update id="updateChild2" parameterType="map">
+       update ${gbtable}
+          set parent= 0
+          where ref=#{ref}
+          AND relevel = #{relevel}+1
+          AND restep > #{restep}
+    </update>
+    
+    <update id="updateChild1" parameterType="map">
+       update ${gbtable}
+    		set parent=0
+    		where ref=#{ref}
+    		AND relevel=#{relevel}+1
+    </update>
+    
+    <select id="findNextSibling" parameterType="map" resultType="int">
+    	select restep from ${gbtable} where ref=#{ref} and relevel=#{relevel} and restep>#{restep} order by restep asc
+    </select>
     
     <delete id="deleteGroupBoard" parameterType="map">
       delete from ${gbtable} where gbno=#{no}

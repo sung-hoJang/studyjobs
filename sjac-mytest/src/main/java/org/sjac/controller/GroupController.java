@@ -94,7 +94,6 @@ public class GroupController {
    @RequestMapping("submit_schedule.do")
    public ModelAndView SubmitSchedule(HttpServletRequest request,ScheduleVO schvo, String gLeaderId, HttpSession session){
 	   ModelAndView mav = new ModelAndView();
-	   System.out.println("이거왜안나오니");
 	   	System.out.println(schvo);
 	      MemberVO mvo = (MemberVO)session.getAttribute("mvo");
 	      schvo.setId(mvo.getId());

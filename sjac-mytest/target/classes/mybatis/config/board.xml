@@ -55,10 +55,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
       order by no desc
    </select>   
    <select id="getBoard" resultMap="boardListRM">
-      select ref, restep from cu_board where no=#{value}
+      select relevel, ref, restep from cu_board where no=#{value}
    </select>
    <select id="showContent"  resultMap="boardListRM">
-   select no,category,content,title,id, to_char(mydate, 'yyyy-mm-dd hh24:mi:ss') as mydate,ref,restep,relevel
+   select no,category,content,title,id, to_char(mydate, 'yyyy-mm-dd hh24:mi:ss') as mydate,hits,ref,restep,relevel
    from cu_board 
    where no=#{value}
    </select>
@@ -89,13 +89,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
        (no,category,content,title,id,mydate,hits,ref,restep,relevel)
        values(#{no},#{category},#{content},#{title},#{memberVO.id},sysdate,0,#{ref},#{restep},#{relevel})
     </insert>
-    <update id="updateChild" parameterType="bvo">
+    <update id="updateChild3" parameterType="map">
        update cu_board
           set parent= 0
           where ref=#{ref}
-          AND restep = #{restep}+1
+          AND relevel = #{relevel}+1 AND
+          <![CDATA[ #{restep} < restep and restep<#{siblingRestep}]]>
     </update>
-
+     <update id="updateChild2" parameterType="map">
+       update cu_board
+          set parent= 0
+          where ref=#{ref}
+          AND relevel = #{relevel}+1
+          AND restep > #{restep}
+    </update>
+    <update id="updateChild1" parameterType="map">
+    	update cu_board
+    		set parent=0
+    		where ref=#{ref}
+    		AND relevel=#{relevel}+1
+    </update>
+    <select id="findNextSibling" parameterType="map" resultType="int">
+    	select restep from cu_board where ref=#{ref} and relevel=#{relevel} and restep>#{restep} order by restep asc
+    </select>
 </mapper>       
  
  

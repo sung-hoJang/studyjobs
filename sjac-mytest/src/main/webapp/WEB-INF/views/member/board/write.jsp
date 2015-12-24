@@ -44,7 +44,7 @@
       			일반글<input type="hidden" name="category" id="category" value="일반글"></input>
    			</c:otherwise>
   		 </c:choose>
-  		 <input type="text" class="form-control" name="title" id="title">
+  		 <input type="text" class="form-control" name="title" id="title" maxlength="15">
       </td>
     </tr>
     <tr>
